@@ -46,32 +46,36 @@ Haven't talked to that friend from chemistry class in a while? KIP will suggest 
 
 * Login 
 * Register - User signs up or logs into their account
-   * Upon Download/Reopening of the application, the user is prompted to log in to gain access to their profile information to be properly matched with another person. 
-   * ...
+   * Upon Download/Reopening of the application, the user is prompted to log in to gain access to their profile information.
+   * Asks for username, password, and birthday.
 * Messaging Screen - Chat for users to communicate (direct 1-on-1)
-   * Upon selecting music choice users matched and message screen opens
 * Profile Screen 
-   * Allows user to upload a photo and fill in information that is interesting to them and others
-* Song Selection Screen.
-   * Allows user to be able to choose their desired song, artist, genre of preference and begin listening and interacting with others.
+   * Allows user to upload a photo and link their social media accounts.
+* Add Friend Screen
+   * Allows user to search for friends by username and send a request
+   * Respond to incoming requests
 * Settings Screen
-   * Lets people change language, and app notification settings.
+   * Lets people change profile picture
+   * Name
+   * Log in / out
 
 ### 3. Navigation
 
 **Tab Navigation** (Tab to Screen)
 
-* Music selection
-* Profile
-* Settings
+* Chats
+* Suggestions
 
-Optional:
-* Music/Encounter Queue
-* Discover (Top Choices)
+Top Left:
+* Profile/Settings
+
+Top Right:
+* Button to start new chat
 
 **Flow Navigation** (Screen to Screen)
 * Forced Log-in -> Account creation if no log in is available
-* Music Selection (Or Queue if Optional) -> Jumps to Chat
+* Jumps to Chat
+* If a suggestion is tapped, jump to chat view
 * Profile -> Text field to be modified. 
 * Settings -> Toggle settings
 
@@ -79,10 +83,10 @@ Optional:
 <img src="https://i.imgur.com/9CrjH1K.jpg" width=800><br>
 
 ### [BONUS] Digital Wireframes & Mockups
-<img src="https://i.imgur.com/lYHn37F.jpg" height=200>
+
 
 ### [BONUS] Interactive Prototype
-<img src="https://i.imgur.com/AiKfE5g.gif" width=200>
+
 
 ## Schema 
 ### Models
