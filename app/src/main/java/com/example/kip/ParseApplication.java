@@ -2,6 +2,8 @@ package com.example.kip;
 
 import android.app.Application;
 
+import com.example.kip.models.Conversation;
+import com.example.kip.models.Message;
 import com.parse.Parse;
 import com.parse.ParseObject;
 
@@ -23,6 +25,7 @@ public class ParseApplication extends Application {
   }
 
   private void registerParseModels() {
-    // ParseObject.registerSubclass(Post.class);
+     ParseObject.registerSubclass(Message.class);
+     ParseObject.registerSubclass(Conversation.class);
   }
 }

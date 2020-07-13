@@ -6,7 +6,7 @@ import com.parse.ParseUser;
 
 import java.util.List;
 
-@ParseClassName("Message")
+@ParseClassName("Conversation")
 public class Conversation extends ParseObject {
   public static final String KEY_MEMBER_IDS = "memberIDs";
   public static final String KEY_LAST_MESSAGE = "lastMessage";
