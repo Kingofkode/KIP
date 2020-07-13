@@ -109,6 +109,7 @@ Top Right:
    | createdAt     | DateTime | date when first message is sent (default field) |
    | updatedAt     | DateTime | date when last message is sent (default field) |
    | lastMessage   | Message Pointer | last message sent |
+   | members  | [User Pointer] | list of users in the conversation |
    
    #### User
 
