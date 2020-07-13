@@ -90,18 +90,26 @@ Top Right:
 
 ## Schema 
 ### Models
-#### Post
+#### Message
 
    | Property      | Type     | Description |
    | ------------- | -------- | ------------|
-   | objectId      | String   | unique id for the user post (default field) |
-   | author        | Pointer to User| image author |
-   | image         | File     | image that user posts |
-   | caption       | String   | image caption by author |
-   | commentsCount | Number   | number of comments that has been posted to an image |
-   | likesCount    | Number   | number of likes for the post |
-   | createdAt     | DateTime | date when post is created (default field) |
-   | updatedAt     | DateTime | date when post is last updated (default field) |
+   | objectId      | String   | unique id for the message (default field) |
+   | createdAt     | DateTime | date when message is sent (default field) |
+   | senderId      | Pointer to Sender| message author |
+   | recipientId   | Pointer to receiver| message recipient |
+   | body          | String   | message body |
+   | image         | File     | image from sender (optional) |
+   
+   #### User
+
+   | Property      | Type     | Description |
+   | ------------- | -------- | ------------|
+   | objectId      | String   | unique id for the user (default field) |
+   | createdAt     | DateTime | date when user is created (default field) |
+   | profileImage  | File     | profile image for user (optional) |
+   | instagramAccount  | String     | instagram profile for user (optional) |
+   
 ### Networking
 #### List of network requests by screen
    - Home Feed Screen
