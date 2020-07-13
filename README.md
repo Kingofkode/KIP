@@ -124,25 +124,33 @@ Top Right:
    
 ### Networking
 #### List of network requests by screen
-   - Home Feed Screen
-      - (Read/GET) Query all posts where user is author
-         ```swift
-         let query = PFQuery(className:"Post")
-         query.whereKey("author", equalTo: currentUser)
-         query.order(byDescending: "createdAt")
-         query.findObjectsInBackground { (posts: [PFObject]?, error: Error?) in
-            if let error = error { 
-               print(error.localizedDescription)
-            } else if let posts = posts {
-               print("Successfully retrieved \(posts.count) posts.")
-           // TODO: Do something with posts...
+   - Conversations Fragment
+      - (Read/GET) Query all conversations that belong to the user
+         ```java
+        ParseQuery<Conversation> conversationQuery = ParseQuery.getQuery(Conversation.class);
+        conversationQuery.include(Conversation.KEY_MEMBER_IDS);
+        conversationQuery.include(Conversation.KEY_LAST_MESSAGE);
+
+        conversationQuery.findInBackground(new FindCallback<Conversation>() {
+          @Override
+          public void done(List<Conversation> conversations, ParseException e) {
+            if (e != null) {
+              Log.e(TAG, "Issue with getting conversations", e);
+              return;
             }
-         }
+
+            for (Conversation conversation : conversations) {
+              try {
+                ParseUser sender = conversation.getLastMessage().getSender().fetchIfNeeded();
+                Message message = conversation.getLastMessage();
+                // Todo: Populate RecyclerView with data
+              } catch (ParseException ex) {
+                ex.printStackTrace();
+              }
+            }
+          }
+        });
          ```
-      - (Create/POST) Create a new like on a post
-      - (Delete) Delete existing like
-      - (Create/POST) Create a new comment on a post
-      - (Delete) Delete existing comment
    - Create Post Screen
       - (Create/POST) Create a new post object
    - Profile Screen
