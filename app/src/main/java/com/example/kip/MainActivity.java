@@ -42,8 +42,7 @@ public class MainActivity extends AppCompatActivity {
         for (Conversation conversation : conversations) {
           try {
             ParseUser sender = conversation.getLastMessage().getSender().fetchIfNeeded();
-            String message = conversation.getLastMessage().getBody();
-            Log.i(TAG, "Conversation: " + conversation.getLastMessage().getBody());
+            Message message = conversation.getLastMessage();
           } catch (ParseException ex) {
             ex.printStackTrace();
           }

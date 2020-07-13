@@ -12,6 +12,8 @@ public class Message extends ParseObject {
   public static final String KEY_SENDER_ID = "senderID";
   public static final String KEY_IMAGE = "image";
   public static final String KEY_CONVERSATION_ID = "conversationID";
+  public static final String KEY_CREATED_AT = "createdAt";
+  public static final String KEY_UPDATED_AT = "updatedAt";
 
   public String getBody() { return getString(KEY_BODY); }
   public void setBody(String body) { put(KEY_BODY, body); }
