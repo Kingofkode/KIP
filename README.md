@@ -151,10 +151,17 @@ Top Right:
           }
         });
          ```
-   - Create Post Screen
-      - (Create/POST) Create a new post object
-   - Profile Screen
-      - (Read/GET) Query logged in user object
+   - New Message Fragment
+      - (Read/GET) User's friends
+      - (Create/POST) Create a new conversation and message object
+   - Add friends activity
+      - (Read/GET) Query user's by user name
+      - (Create/POST) Send friend request
+   - Message activity
+      - (Read/GET) all messages betweens users
+      - (Create/POST) new messages
+   - Profile activity
+      - (Update/PUT) Unfriend a profile
       - (Update/PUT) Update user profile image
 #### [OPTIONAL:] Existing API Endpoints
 ##### An API Of Ice And Fire
