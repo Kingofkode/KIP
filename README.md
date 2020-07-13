@@ -107,6 +107,7 @@ Top Right:
    | ------------- | -------- | ------------|
    | objectId      | String   | unique id for the user (default field) |
    | createdAt     | DateTime | date when user is created (default field) |
+   | friendIds | [String] | unique ids for the users the user is friends with
    | profileImage  | File     | profile image for user (optional) |
    | instagramAccount  | String     | instagram profile for user (optional) |
    
