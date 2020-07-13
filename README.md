@@ -96,10 +96,19 @@ Top Right:
    | ------------- | -------- | ------------|
    | objectId      | String   | unique id for the message (default field) |
    | createdAt     | DateTime | date when message is sent (default field) |
-   | senderId      | Pointer to Sender| message author |
-   | recipientId   | Pointer to receiver| message recipient |
+   | conversationID | String | pointer to conversation that this message belongs to
+   | senderId      | User Pointer| message author |
    | body          | String   | message body |
    | image         | File     | image from sender (optional) |
+   
+   #### Coversation
+
+   | Property      | Type     | Description |
+   | ------------- | -------- | ------------|
+   | objectId      | String   | unique id for the conversation (default field) |
+   | createdAt     | DateTime | date when first message is sent (default field) |
+   | updatedAt     | DateTime | date when last message is sent (default field) |
+   | lastMessage   | Message Pointer | last message sent |
    
    #### User
 
@@ -107,9 +116,10 @@ Top Right:
    | ------------- | -------- | ------------|
    | objectId      | String   | unique id for the user (default field) |
    | createdAt     | DateTime | date when user is created (default field) |
-   | friendIds | [String] | unique ids for the users the user is friends with
+   | friendIds | [User Pointer] | unique ids for the users the user is friends with
    | profileImage  | File     | profile image for user (optional) |
    | instagramAccount  | String     | instagram profile for user (optional) |
+   | conversationIds | [Conversation Pointer] | unqiue ids for the conversations the user is a part of
    
 ### Networking
 #### List of network requests by screen
