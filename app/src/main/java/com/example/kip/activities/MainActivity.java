@@ -1,13 +1,21 @@
 package com.example.kip.activities;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 
+import com.example.kip.ChatsFragment;
 import com.example.kip.R;
+import com.example.kip.SuggestionsFragment;
+import com.example.kip.databinding.ActivityMainBinding;
 import com.example.kip.models.Conversation;
 import com.example.kip.models.Message;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
@@ -19,13 +27,41 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
   private static final String TAG = "MainActivity";
+  final FragmentManager fragmentManager = getSupportFragmentManager();
+
+  ActivityMainBinding binding;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_main);
-    queryConversations();
+
+    binding = ActivityMainBinding.inflate(getLayoutInflater());
+    setContentView(binding.getRoot());
+
+    setupNavigationView();
   }
+
+  private void setupNavigationView() {
+    binding.bottomNavigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+      @Override
+      public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+        Fragment fragment;
+        switch (menuItem.getItemId()) {
+          case R.id.action_suggestions: // Suggestions tab
+            fragment = new SuggestionsFragment();
+            break;
+          default: // Chats tab
+            fragment = new ChatsFragment();
+            break;
+        }
+        fragmentManager.beginTransaction().replace(binding.flContainer.getId(), fragment).commit();
+        return true;
+      }
+    });
+    // Set default selection
+    binding.bottomNavigation.setSelectedItemId(R.id.action_chats);
+  }
+
 
   private void queryConversations() {
     ParseQuery<Conversation> conversationQuery = ParseQuery.getQuery(Conversation.class);
@@ -51,6 +87,5 @@ public class MainActivity extends AppCompatActivity {
         }
       }
     });
-
   }
 }

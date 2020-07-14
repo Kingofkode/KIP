@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/action_chats"
+        android:icon="@android:drawable/stat_notify_chat"
+        android:title="Chats"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_suggestions"
+        android:icon="@drawable/ic_launcher_foreground"
+        android:title="Suggestions"
+        app:showAsAction="always" />
+</menu>
