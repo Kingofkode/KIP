@@ -43,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
           try {
             ParseUser sender = conversation.getLastMessage().getSender().fetchIfNeeded();
             Message message = conversation.getLastMessage();
+            // Todo: Populate RecyclerView with data
           } catch (ParseException ex) {
             ex.printStackTrace();
           }
