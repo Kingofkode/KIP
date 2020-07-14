@@ -1,6 +1,8 @@
 package com.example.kip.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -18,6 +20,11 @@ public class MessageActivity extends AppCompatActivity {
     binding = ActivityMessageBinding.inflate(getLayoutInflater());
     setContentView(binding.getRoot());
 
+  }
 
+  public void onMessageProfileClick(View view) {
+    Intent profileIntent = new Intent(this, ProfileActivity.class);
+    // TODO: Pass along the profile to view
+    this.startActivity(profileIntent);
   }
 }
