@@ -4,21 +4,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.LoginActivity"
+    tools:context=".activities.RegistrationActivity"
     android:orientation="vertical">
 
 
-    <Button
-        android:id="@+id/button"
+    <TextView
+        android:id="@+id/RegistrationActivity"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Login"
-        android:onClick="onLoginClick"/>
+        android:text="Registration Activity" />
 
     <Button
-        android:id="@+id/button3"
+        android:id="@+id/button2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Sign Up"
-        android:onClick="onRegisterClick"/>
+        android:onClick="onSignupClick"/>
 </LinearLayout>
