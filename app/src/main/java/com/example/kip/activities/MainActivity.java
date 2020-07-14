@@ -5,9 +5,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.example.kip.fragments.ChatsFragment;
 import com.example.kip.R;
@@ -61,6 +63,11 @@ public class MainActivity extends AppCompatActivity {
     binding.bottomNavigation.setSelectedItemId(R.id.action_chats);
   }
 
+  // User presses profile button
+  public void onProfileClick(View view) {
+    Intent profileIntent = new Intent(this, ProfileActivity.class);
+    startActivity(profileIntent);
+  }
 
   private void queryConversations() {
     ParseQuery<Conversation> conversationQuery = ParseQuery.getQuery(Conversation.class);
