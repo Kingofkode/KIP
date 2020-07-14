@@ -9,16 +9,15 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 
-import com.example.kip.ChatsFragment;
+import com.example.kip.fragments.ChatsFragment;
 import com.example.kip.R;
-import com.example.kip.SuggestionsFragment;
+import com.example.kip.fragments.SuggestionsFragment;
 import com.example.kip.databinding.ActivityMainBinding;
 import com.example.kip.models.Conversation;
 import com.example.kip.models.Message;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.parse.FindCallback;
 import com.parse.ParseException;
-import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
