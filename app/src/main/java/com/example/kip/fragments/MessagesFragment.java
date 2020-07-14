@@ -1,28 +1,27 @@
 package com.example.kip.fragments;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-
 import com.example.kip.adapters.ConversationsAdapter;
-import com.example.kip.databinding.FragmentChatsBinding;
+import com.example.kip.databinding.FragmentMessagesBinding;
 
-public class ChatsFragment extends Fragment {
+public class MessagesFragment extends Fragment {
 
   private static final String TAG = "ChatsFragment";
 
-  FragmentChatsBinding binding;
+  FragmentMessagesBinding binding;
   private ConversationsAdapter adapter;
 
   // Required empty public constructor
-  public ChatsFragment() {
+  public MessagesFragment() {
 
   }
 
@@ -30,7 +29,7 @@ public class ChatsFragment extends Fragment {
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
                            Bundle savedInstanceState) {
     // Inflate the layout for this fragment
-    binding = FragmentChatsBinding.inflate(inflater, container, false);
+    binding = FragmentMessagesBinding.inflate(inflater, container, false);
     return binding.getRoot();
   }
 

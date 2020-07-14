@@ -11,7 +11,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.example.kip.fragments.ChatsFragment;
+import com.example.kip.fragments.MessagesFragment;
 import com.example.kip.R;
 import com.example.kip.fragments.SuggestionsFragment;
 import com.example.kip.databinding.ActivityMainBinding;
@@ -51,8 +51,8 @@ public class MainActivity extends AppCompatActivity {
           case R.id.action_suggestions: // Suggestions tab
             fragment = new SuggestionsFragment();
             break;
-          default: // Chats tab
-            fragment = new ChatsFragment();
+          default: // Messages tab
+            fragment = new MessagesFragment();
             break;
         }
         fragmentManager.beginTransaction().replace(binding.flContainer.getId(), fragment).commit();
@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
       }
     });
     // Set default selection
-    binding.bottomNavigation.setSelectedItemId(R.id.action_chats);
+    binding.bottomNavigation.setSelectedItemId(R.id.action_messages);
   }
 
   // User presses profile button
@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
 
   // User presses new chat button
   public void onNewChatClick(View view) {
-    Intent newChatIntent = new Intent(this, NewChatActivity.class);
+    Intent newChatIntent = new Intent(this, NewMessageActivity.class);
     startActivity(newChatIntent);
   }
 

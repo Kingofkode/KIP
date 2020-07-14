@@ -10,7 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.kip.R;
-import com.example.kip.activities.ChatActivity;
+import com.example.kip.activities.MessageActivity;
 
 public class ConversationsAdapter extends RecyclerView.Adapter<ConversationsAdapter.ViewHolder> {
 
@@ -47,7 +47,7 @@ public class ConversationsAdapter extends RecyclerView.Adapter<ConversationsAdap
     @Override
     public void onClick(View view) {
       // TODO: Pass along the conversation object
-      Intent chatIntent = new Intent(context, ChatActivity.class);
+      Intent chatIntent = new Intent(context, MessageActivity.class);
       context.startActivity(chatIntent);
     }
   }
