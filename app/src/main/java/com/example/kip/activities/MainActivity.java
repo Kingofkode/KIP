@@ -69,6 +69,12 @@ public class MainActivity extends AppCompatActivity {
     startActivity(profileIntent);
   }
 
+  // User presses add friend button
+  public void onAddFriendClick(View view) {
+    Intent addFriendIntent = new Intent(this, AddFriendActivity.class);
+    startActivity(addFriendIntent);
+  }
+
   private void queryConversations() {
     ParseQuery<Conversation> conversationQuery = ParseQuery.getQuery(Conversation.class);
     conversationQuery.include(Conversation.KEY_MEMBER_IDS);
