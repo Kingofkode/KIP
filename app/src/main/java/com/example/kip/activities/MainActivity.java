@@ -75,6 +75,12 @@ public class MainActivity extends AppCompatActivity {
     startActivity(addFriendIntent);
   }
 
+  // User presses new chat button
+  public void onNewChatClick(View view) {
+    Intent newChatIntent = new Intent(this, NewChatActivity.class);
+    startActivity(newChatIntent);
+  }
+
   private void queryConversations() {
     ParseQuery<Conversation> conversationQuery = ParseQuery.getQuery(Conversation.class);
     conversationQuery.include(Conversation.KEY_MEMBER_IDS);
