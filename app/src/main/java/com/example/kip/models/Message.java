@@ -19,7 +19,7 @@ public class Message extends ParseObject {
   public void setBody(String body) { put(KEY_BODY, body); }
 
   public ParseUser getSender() { return getParseUser(KEY_SENDER_ID); }
-  public void setSender(ParseUser sender) {put(KEY_SENDER_ID, sender); }
+  public void setSender(ParseUser sender) { put(KEY_SENDER_ID, sender); }
 
   public ParseFile getImage() { return getParseFile(KEY_IMAGE); }
   public void setImage(ParseFile parseFile) { put(KEY_IMAGE, parseFile); }
