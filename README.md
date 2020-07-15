@@ -30,7 +30,7 @@ Haven't talked to that friend from chemistry class in a while? KIP will suggest 
 * User logs in to access chats and suggestions
 * Link Facebook/Instagram account
 * User can add a new friend by searching for their username
-* User can send texts and photos
+* User can send texts
 * Profile pages for each user with the last time you connected, social medias, profile picture, username
 * Account page (username, profile picture, signing in and out)
 
@@ -41,7 +41,8 @@ Haven't talked to that friend from chemistry class in a while? KIP will suggest 
 * Add friends from social media or contacts
 * Show shared interests in profile section
 * Connect a news API
-
+* Users can send photos
+* Chats and Friend requests are pushed from Parse Server
 ### 2. Screen Archetypes
 
 * Login 
