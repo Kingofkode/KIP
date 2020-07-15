@@ -81,13 +81,7 @@ Top Right:
 * Settings -> Toggle settings
 
 ## Wireframes
-<img src="https://raw.githubusercontent.com/Kingofkode/KIP/master/KIP%20Wireframe%201.jpg" width=400><br> <img src="https://raw.githubusercontent.com/Kingofkode/KIP/master/KIP%20Wireframe%202.jpg" width=400><br>
-
-### [BONUS] Digital Wireframes & Mockups
-
-
-### [BONUS] Interactive Prototype
-
+<img src="https://raw.githubusercontent.com/Kingofkode/KIP/master/KIP%20Wireframe%201.jpg" width=1000><br> <img src="https://raw.githubusercontent.com/Kingofkode/KIP/master/KIP%20Wireframe%202.jpg" width=1000><br>
 
 ## Schema 
 ### Models
