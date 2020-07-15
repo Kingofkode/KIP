@@ -19,7 +19,7 @@ public class MessageTests extends ParseTest {
 
   // Tests getBody() and setBody()
   @Test
-  public void message_body_isCorrect() {
+  public void bodyIsCorrect() {
     Message message = new Message();
     message.setBody("Hi from Menlo Park!");
     assertEquals("Hi from Menlo Park!", message.getBody());
@@ -27,7 +27,7 @@ public class MessageTests extends ParseTest {
 
   // Tests getSender() and setSender()
   @Test
-  public void message_sender_isCorrect() {
+  public void senderIsCorrect() {
     Message message = new Message();
 
     // Mocked user
@@ -43,7 +43,7 @@ public class MessageTests extends ParseTest {
 
   // Tests getImage() and setImage()
   @Test
-  public void message_image_isCorrect() {
+  public void imageIsCorrect() {
     Message message = new Message();
 
     // Mocked photo file
@@ -58,7 +58,7 @@ public class MessageTests extends ParseTest {
 
   // Tests getConversation() and setConversation()
   @Test
-  public void message_conversation_isCorrect() {
+  public void conversationIsCorrect() {
     // Mocked conversation with ID = 4
     Conversation conversation = new Conversation();
     conversation.setObjectId("4");
