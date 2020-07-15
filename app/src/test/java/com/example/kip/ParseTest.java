@@ -26,13 +26,8 @@ public abstract class ParseTest {
       Context context = ShadowApplication.getInstance().getApplicationContext();
       Parse.enableLocalDatastore(context);
 
-      ParseObject.registerSubclass(Message.class);
-      ParseObject.registerSubclass(Conversation.class);
-
-      Parse.initialize(new Parse.Configuration.Builder(context)
-        .applicationId("kip-fbu")
-        .clientKey(null)
-        .server("https://kip-fbu.herokuapp.com/parse").build());
+      ParseApplication.registerParseModels();
+      ParseApplication.initializeParse(context);
 
       ParseUser.enableAutomaticUser();
 
