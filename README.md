@@ -122,6 +122,15 @@ Top Right:
    | instagramAccount  | String     | instagram profile for user (optional) |
    | conversationIds | [Conversation Pointer] | unqiue ids for the conversations the user is a part of
    
+   #### FriendRequest
+
+   | Property      | Type     | Description |
+   | ------------- | -------- | ------------|
+   | objectId      | String   | unique id for the request (default field) |
+   | createdAt     | DateTime | request when request is sent (default field) |
+   | senderId      | User Pointer| request author |
+   | recipientId | User Pointer | request destination
+   
 ### Networking
 #### List of network requests by screen
    - Conversations Fragment
