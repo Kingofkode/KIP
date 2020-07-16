@@ -7,16 +7,18 @@
 
     <ImageView
         android:id="@+id/ivProfile"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginLeft="16dp"
         tools:srcCompat="@tools:sample/avatars" />
 
     <LinearLayout
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="16dp"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="60dp"
         android:gravity="center"
-        android:orientation="vertical"
-        android:paddingHorizontal="8dp">
+        android:orientation="vertical">
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -37,7 +39,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
-                android:text="2:59pm" />
+                android:text="2:59pm"
+                android:maxLines="1"/>
         </RelativeLayout>
 
         <TextView
