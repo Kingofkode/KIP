@@ -11,7 +11,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.example.kip.fragments.MessagesFragment;
+import com.example.kip.fragments.ConversationsFragment;
 import com.example.kip.R;
 import com.example.kip.fragments.SuggestionsFragment;
 import com.example.kip.databinding.ActivityMainBinding;
@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
             fragment = new SuggestionsFragment();
             break;
           default: // Messages tab
-            fragment = new MessagesFragment();
+            fragment = new ConversationsFragment();
             break;
         }
         fragmentManager.beginTransaction().replace(binding.flContainer.getId(), fragment).commit();
