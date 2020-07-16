@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
           case R.id.action_suggestions: // Suggestions tab
             fragment = new SuggestionsFragment();
             break;
-          default: // Messages tab
+          default: // Conversations tab
             fragment = new ConversationsFragment();
             break;
         }

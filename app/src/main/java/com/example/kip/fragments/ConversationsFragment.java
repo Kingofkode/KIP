@@ -38,8 +38,8 @@ public class ConversationsFragment extends Fragment {
     super.onViewCreated(view, savedInstanceState);
 
     adapter = new ConversationsAdapter(getContext());
-    binding.rvChats.setAdapter(adapter);
-    binding.rvChats.setLayoutManager(new LinearLayoutManager(getContext()));
+    binding.rvConversations.setAdapter(adapter);
+    binding.rvConversations.setLayoutManager(new LinearLayoutManager(getContext()));
 
   }
 }
