@@ -30,7 +30,17 @@ public class MessageActivity extends AppCompatActivity {
     ArrayList<Message> messages = new ArrayList<>();
     Message message1 = new Message();
     message1.setBody("Hi Isaiah!");
+
+    Message message2 = new Message();
+    message2.setBody("Hi Zuck!");
+
+    Message message3 = new Message();
+    message3.setBody("Another");
+
     messages.add(message1);
+    messages.add(message2);
+    messages.add(message3);
+
 
     adapter = new MessagesAdapter(this, messages);
 
