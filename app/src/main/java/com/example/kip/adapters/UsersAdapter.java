@@ -19,10 +19,12 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
 
   Context context;
   List<ParseUser> users;
+  Boolean usersAreFriends; // Hides or shows relevant views
 
-  public UsersAdapter(Context context, List<ParseUser> users) {
+  public UsersAdapter(Context context, List<ParseUser> users, Boolean usersAreFriends) {
     this.context = context;
     this.users = users;
+    this.usersAreFriends = usersAreFriends;
   }
 
   @NonNull
@@ -34,12 +36,8 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
 
   @Override
   public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-    // TODO: Load actual user
-    holder.binding.tvUsername.setText(users.get(position).getUsername());
-    Glide.with(context)
-      .load("https://static.independent.co.uk/s3fs-public/thumbnails/image/2017/09/01/15/zuckprofpic.jpg?w968h681")
-      .circleCrop()
-      .into(holder.binding.ivProfile);
+    ParseUser user = users.get(position);
+    holder.bind(user);
   }
 
   @Override
@@ -54,6 +52,18 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
     public ViewHolder(@NonNull View itemView) {
       super(itemView);
       binding = ItemUserBinding.bind(itemView);
+    }
+
+    public void bind(ParseUser user) {
+      // TODO: Load actual user
+      binding.tvUsername.setText(user.getUsername());
+
+      Glide.with(context)
+        .load("https://static.independent.co.uk/s3fs-public/thumbnails/image/2017/09/01/15/zuckprofpic.jpg?w968h681")
+        .circleCrop()
+        .into(binding.ivProfile);
+
+      binding.btnAdd.setVisibility(usersAreFriends ? View.GONE : View.VISIBLE);
     }
   }
 

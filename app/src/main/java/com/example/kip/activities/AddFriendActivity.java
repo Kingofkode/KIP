@@ -40,7 +40,7 @@ public class AddFriendActivity extends AppCompatActivity {
       users.add(user1);
     }
 
-    adapter = new UsersAdapter(this, users);
+    adapter = new UsersAdapter(this, users, false);
 
     binding.rvUsers.setAdapter(adapter);
     binding.rvUsers.setLayoutManager(new LinearLayoutManager(this));
