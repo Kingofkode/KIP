@@ -58,7 +58,8 @@
             android:clickable="true"
             android:gravity="center"
             android:text="SEND"
-            android:textSize="14dp" />
+            android:textSize="14dp"
+            android:onClick="onSendClick"/>
 
     </LinearLayout>
 

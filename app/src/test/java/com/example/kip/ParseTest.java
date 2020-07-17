@@ -2,10 +2,7 @@ package com.example.kip;
 
 import android.content.Context;
 
-import com.example.kip.models.Conversation;
-import com.example.kip.models.Message;
 import com.parse.Parse;
-import com.parse.ParseObject;
 import com.parse.ParseUser;
 
 import org.junit.Before;
