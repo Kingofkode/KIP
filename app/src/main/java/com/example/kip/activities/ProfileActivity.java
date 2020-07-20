@@ -42,7 +42,17 @@ public class ProfileActivity extends PhotoActivity {
     setContentView(binding.getRoot());
 
     currentUser = ParseUser.getCurrentUser();
+    currentUser.fetchInBackground(new GetCallback<ParseObject>() {
+      @Override
+      public void done(ParseObject object, ParseException e) {
+        inflateProfile();
+      }
+    });
 
+    inflateProfile();
+  }
+
+  private void inflateProfile() {
     binding.tvUsername.setText(currentUser.getUsername());
     inflateProfileImage();
     inflateFriendCount();
@@ -55,6 +65,7 @@ public class ProfileActivity extends PhotoActivity {
     }
     Glide.with(this)
       .load(imageFileReference.getUrl())
+      .placeholder(R.drawable.profile_placeholder)
       .circleCrop()
       .into(binding.ivProfile);
 
