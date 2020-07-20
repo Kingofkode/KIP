@@ -136,14 +136,14 @@ import java.io.IOException;
     File file = new File(this.getCacheDir(), photoFileName);
     try {
       file.createNewFile();
-      ByteArrayOutputStream bos = new ByteArrayOutputStream();
-      bitmap.compress(Bitmap.CompressFormat.PNG, 0 /*ignored for PNG*/, bos);
-      byte[] bitmapData = bos.toByteArray();
+      ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+      bitmap.compress(Bitmap.CompressFormat.PNG, 0 /*ignored for PNG*/, byteArrayOutputStream);
+      byte[] bitmapData = byteArrayOutputStream.toByteArray();
 
-      FileOutputStream fos = new FileOutputStream(file);
-      fos.write(bitmapData);
-      fos.flush();
-      fos.close();
+      FileOutputStream fileOutputStream = new FileOutputStream(file);
+      fileOutputStream.write(bitmapData);
+      fileOutputStream.flush();
+      fileOutputStream.close();
     } catch (IOException e) {
       e.printStackTrace();
     }
