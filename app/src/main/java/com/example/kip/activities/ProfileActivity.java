@@ -4,11 +4,13 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.ImageDecoder;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -21,7 +23,10 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.example.kip.R;
 import com.example.kip.databinding.ActivityProfileBinding;
+import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
 import java.io.File;
 import java.io.IOException;
@@ -30,6 +35,7 @@ import java.util.List;
 public class ProfileActivity extends PhotoActivity {
 
   public static final String KEY_FRIEND_IDS = "friendIDs";
+  public static final String KEY_PROFILE_IMAGE = "profileImage";
 
   private static final String TAG = "ProfileActivity";
 
@@ -97,6 +103,7 @@ public class ProfileActivity extends PhotoActivity {
         // RESIZE BITMAP, see section below
         // Load the taken image into a preview
         binding.ivProfile.setImageBitmap(takenImage);
+        saveProfilePicture();
       } else { // Result was a failure
         Toast.makeText(this, "Picture wasn't taken!", Toast.LENGTH_SHORT).show();
       }
@@ -112,6 +119,25 @@ public class ProfileActivity extends PhotoActivity {
       // Load the selected image into a preview
       binding.ivProfile.setImageBitmap(selectedImage);
     }
+  }
+
+  private void saveProfilePicture() {
+    currentUser.put(KEY_PROFILE_IMAGE, new ParseFile(photoFile));
+    final ProgressDialog dialog = ProgressDialog.show(this, "", "Uploading ...", true);
+    currentUser.saveInBackground(new SaveCallback() {
+      @Override
+      public void done(ParseException e) {
+        dialog.dismiss();
+        if (e != null) { // Failed to save profile picture
+          Log.e(TAG, "Error while saving profile picture", e);
+          Toast.makeText(ProfileActivity.this, "Upload failed. Please try again.", Toast.LENGTH_SHORT).show();
+          return;
+        }
+        // Picture saved successfully
+        Log.i(TAG, "Profile photo saved successfully");
+      }
+    });
+
   }
 
 }
