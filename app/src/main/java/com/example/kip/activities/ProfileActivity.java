@@ -22,6 +22,7 @@ import com.parse.ParseObject;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
+import java.io.File;
 import java.util.List;
 
 public class ProfileActivity extends PhotoActivity {
@@ -109,7 +110,7 @@ public class ProfileActivity extends PhotoActivity {
         // RESIZE BITMAP, see section below
         // Load the taken image into a preview
         binding.ivProfile.setImageBitmap(takenImage);
-        saveProfilePicture();
+        saveProfilePicture(photoFile);
       } else { // Result was a failure
         Toast.makeText(this, "Picture wasn't taken!", Toast.LENGTH_SHORT).show();
       }
@@ -121,13 +122,14 @@ public class ProfileActivity extends PhotoActivity {
 
       // Load the image located at photoUri into selectedImage
       Bitmap selectedImage = loadChosenPhotoFromUri(photoUri);
-
+      File chosenPhotoFile = bitmapToFile(selectedImage);
+      saveProfilePicture(chosenPhotoFile);
       // Load the selected image into a preview
       binding.ivProfile.setImageBitmap(selectedImage);
     }
   }
 
-  private void saveProfilePicture() {
+  private void saveProfilePicture(File photoFile) {
     currentUser.put(KEY_PROFILE_IMAGE, new ParseFile(photoFile));
     final ProgressDialog dialog = ProgressDialog.show(this, "", "Uploading ...", true);
     currentUser.saveInBackground(new SaveCallback() {

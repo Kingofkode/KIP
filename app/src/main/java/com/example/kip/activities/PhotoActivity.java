@@ -15,7 +15,9 @@ import android.util.Log;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 
  public abstract class PhotoActivity extends AppCompatActivity {
@@ -128,5 +130,23 @@ import java.io.IOException;
       e.printStackTrace();
     }
     return image;
+  }
+
+  public File bitmapToFile(Bitmap bitmap) {
+    File file = new File(this.getCacheDir(), photoFileName);
+    try {
+      file.createNewFile();
+      ByteArrayOutputStream bos = new ByteArrayOutputStream();
+      bitmap.compress(Bitmap.CompressFormat.PNG, 0 /*ignored for PNG*/, bos);
+      byte[] bitmapData = bos.toByteArray();
+
+      FileOutputStream fos = new FileOutputStream(file);
+      fos.write(bitmapData);
+      fos.flush();
+      fos.close();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    return file;
   }
 }
