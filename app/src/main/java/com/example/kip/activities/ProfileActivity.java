@@ -15,8 +15,10 @@ import androidx.appcompat.app.AlertDialog;
 import com.bumptech.glide.Glide;
 import com.example.kip.R;
 import com.example.kip.databinding.ActivityProfileBinding;
+import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.ParseObject;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
@@ -40,24 +42,22 @@ public class ProfileActivity extends PhotoActivity {
     setContentView(binding.getRoot());
 
     currentUser = ParseUser.getCurrentUser();
-    populateUserData();
 
+    binding.tvUsername.setText(currentUser.getUsername());
+    inflateProfileImage();
+    inflateFriendCount();
   }
 
-  private void populateUserData() {
-    binding.tvUsername.setText(currentUser.getUsername());
-    inflateFriendCount();
-    String imageUrl = null;
-    try {
-      imageUrl = currentUser.fetch().getParseFile(KEY_PROFILE_IMAGE).getUrl();
-    } catch (ParseException e) {
-      // FIXME: Keeping getting Invalid session token
-      e.printStackTrace();
+  private void inflateProfileImage() {
+    ParseFile imageFileReference = currentUser.getParseFile(KEY_PROFILE_IMAGE);
+    if (imageFileReference == null) {
+      return;
     }
     Glide.with(this)
-      .load(imageUrl)
+      .load(imageFileReference.getUrl())
       .circleCrop()
       .into(binding.ivProfile);
+
   }
 
   private void inflateFriendCount() {
