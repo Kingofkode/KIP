@@ -1,15 +1,20 @@
 package com.example.kip.activities;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.kip.databinding.ActivityLoginBinding;
+import com.parse.LogInCallback;
+import com.parse.ParseException;
 import com.parse.ParseUser;
 
 public class LoginActivity extends AppCompatActivity {
@@ -83,8 +88,25 @@ public class LoginActivity extends AppCompatActivity {
 
   // User pressed "Log In" button
   public void onLoginClick(View view) {
-    // TODO: Actually login
-    launchMainActivity();
+    String username = binding.etUsername.getText().toString();
+    String password = binding.etPassword.getText().toString();
+
+    final ProgressDialog dialog = ProgressDialog.show(this, "", "Logging in ...", true);
+    ParseUser.logInInBackground(username, password, new LogInCallback() {
+      @Override
+      public void done(ParseUser user, ParseException e) {
+        dialog.dismiss();
+        if (e != null) {
+          // Login failed
+          Log.e(TAG, "FAILED to login", e);
+          Toast.makeText(LoginActivity.this, "Incorrect username or password", Toast.LENGTH_SHORT).show();
+          return;
+        }
+        // Login was successful
+        launchMainActivity();
+      }
+    });
+
   }
 
   // User pressed "Sign Up" button
