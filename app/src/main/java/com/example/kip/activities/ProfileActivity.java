@@ -1,8 +1,12 @@
 package com.example.kip.activities;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.kip.R;
@@ -31,6 +35,7 @@ public class ProfileActivity extends AppCompatActivity {
     populateUserData();
 
   }
+
   private void populateUserData() {
     binding.tvUsername.setText(currentUser.getUsername());
     inflateFriendCount();
@@ -50,6 +55,22 @@ public class ProfileActivity extends AppCompatActivity {
     }
     String friendCountString = getResources().getQuantityString(R.plurals.numberOfFriends, friendCount, friendCount);
     binding.tvFriendCount.setText(friendCountString);
+  }
+
+  public void onProfilePictureClick(View view) {
+    String[] options = {"Take Photo", "Choose existing photo"};
+    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+    builder.setItems(options, new DialogInterface.OnClickListener() {
+      @Override
+      public void onClick(DialogInterface dialogInterface, int optionIndex) {
+        if (optionIndex == 0) { // Take Photo
+
+        } else { // Choose photo
+
+        }
+      }
+    });
+    builder.show();
   }
 }
 
