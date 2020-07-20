@@ -67,6 +67,7 @@ public class ProfileActivity extends PhotoActivity {
   private void inflateProfileImage() {
     ParseFile imageFileReference = currentUser.getParseFile(KEY_PROFILE_IMAGE);
     if (imageFileReference == null) {
+      binding.ivProfile.setImageResource(R.drawable.profile_placeholder);
       return;
     }
     Glide.with(this)
