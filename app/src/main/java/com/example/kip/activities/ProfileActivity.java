@@ -88,6 +88,7 @@ public class ProfileActivity extends PhotoActivity {
   @Override
   public void onActivityResult(int requestCode, int resultCode, Intent data) {
     super.onActivityResult(requestCode, resultCode, data);
+
     // Taken photo from camera
     if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
       if (resultCode == RESULT_OK) {
@@ -100,8 +101,9 @@ public class ProfileActivity extends PhotoActivity {
         Toast.makeText(this, "Picture wasn't taken!", Toast.LENGTH_SHORT).show();
       }
     }
+
     // Chosen from photo library
-    if ((data != null) && requestCode == PICK_PHOTO_CODE) {
+    if (requestCode == PICK_PHOTO_CODE && data != null) {
       Uri photoUri = data.getData();
 
       // Load the image located at photoUri into selectedImage
@@ -110,7 +112,6 @@ public class ProfileActivity extends PhotoActivity {
       // Load the selected image into a preview
       binding.ivProfile.setImageBitmap(selectedImage);
     }
-
   }
 
 }

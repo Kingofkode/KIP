@@ -15,7 +15,7 @@ import androidx.core.content.FileProvider;
 import java.io.File;
 import java.io.IOException;
 
-public class PhotoActivity extends AppCompatActivity {
+ public abstract class PhotoActivity extends AppCompatActivity {
 
   public final String APP_TAG = "KIP";
   public final static int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 1034;
