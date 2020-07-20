@@ -2,6 +2,8 @@ package com.example.kip.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 
 import androidx.annotation.Nullable;
@@ -29,6 +31,36 @@ public class LoginActivity extends AppCompatActivity {
       launchMainActivity();
     }
 
+    setupTextWatchers();
+
+  }
+
+  // Enables / Disables login button depending on EditTexts
+  private void setupTextWatchers() {
+    TextWatcher textWatcher = new TextWatcher() {
+      @Override
+      public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+      }
+
+      @Override
+      public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+      }
+
+      @Override
+      public void afterTextChanged(Editable editable) {
+        binding.btnLogin.setEnabled(canLogin());
+      }
+    };
+
+    binding.etUsername.addTextChangedListener(textWatcher);
+    binding.etPassword.addTextChangedListener(textWatcher);
+  }
+
+
+  private Boolean canLogin() {
+    return !binding.etUsername.getText().toString().isEmpty() && !binding.etPassword.getText().toString().isEmpty();
   }
 
   private void launchMainActivity() {

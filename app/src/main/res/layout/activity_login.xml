@@ -39,7 +39,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:onClick="onLoginClick"
-        android:text="Login" />
+        android:text="Login"
+        android:enabled="false"/>
 
     <Button
         android:id="@+id/btnSignUp"
