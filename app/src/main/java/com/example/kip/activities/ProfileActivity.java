@@ -7,15 +7,20 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 
 import com.bumptech.glide.Glide;
 import com.example.kip.R;
 import com.example.kip.databinding.ActivityProfileBinding;
 import com.parse.GetCallback;
+import com.parse.LogOutCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
@@ -148,5 +153,34 @@ public class ProfileActivity extends PhotoActivity {
 
   }
 
+  @Override
+  public boolean onCreateOptionsMenu(Menu menu) {
+    MenuInflater inflater = getMenuInflater();
+    inflater.inflate(R.menu.profile_menu, menu);
+    return true;
+  }
+
+  @Override
+  public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+    if (item.getItemId() == R.id.action_logout) {
+      logout();
+      return true;
+    }
+    return super.onOptionsItemSelected(item);
+
+  }
+
+  private void logout() {
+    final ProgressDialog dialog = ProgressDialog.show(this, "", "Logging out...", true);
+    ParseUser.logOutInBackground(new LogOutCallback() {
+      @Override
+      public void done(ParseException e) {
+        dialog.dismiss();
+        Intent logInIntent = new Intent(ProfileActivity.this, LoginActivity.class);
+        logInIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(logInIntent);
+      }
+    });
+  }
 }
 
