@@ -3,6 +3,9 @@
     package="com.example.kip">
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <!-- For choosing photos -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <application
         android:name=".ParseApplication"
         android:allowBackup="true"
@@ -25,7 +28,7 @@
             </intent-filter>
         </activity>
 
-        <!-- make sure within the application tag, otherwise app will crash with XmlResourceParser errors -->
+        <!-- For taking photos -->
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.KIP.fileprovider"

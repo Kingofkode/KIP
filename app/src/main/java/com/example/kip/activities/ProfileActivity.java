@@ -8,7 +8,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.ImageDecoder;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -22,6 +24,7 @@ import com.example.kip.databinding.ActivityProfileBinding;
 import com.parse.ParseUser;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 public class ProfileActivity extends AppCompatActivity {
@@ -73,9 +76,9 @@ public class ProfileActivity extends AppCompatActivity {
       @Override
       public void onClick(DialogInterface dialogInterface, int optionIndex) {
         if (optionIndex == 0) { // Take Photo
-          onLaunchCamera();
+          launchCamera();
         } else { // Choose photo
-
+          pickPhoto();
         }
       }
     });
@@ -87,11 +90,11 @@ public class ProfileActivity extends AppCompatActivity {
   public String photoFileName = "photo.jpg";
   File photoFile;
 
-  public void onLaunchCamera() {
+  public void launchCamera() {
     // create Intent to take a picture and return control to the calling application
     Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
     // Create a File reference for future access
-    photoFile = getPhotoFileUri(photoFileName);
+    photoFile = getTakenPhotoFileUri(photoFileName);
 
     // wrap File object into a content provider
     // required for API >= 24
@@ -108,7 +111,7 @@ public class ProfileActivity extends AppCompatActivity {
   }
 
   // Returns the File for a photo stored on disk given the fileName
-  public File getPhotoFileUri(String fileName) {
+  public File getTakenPhotoFileUri(String fileName) {
     // Get safe storage directory for photos
     // Use `getExternalFilesDir` on Context to access package-specific directories.
     // This way, we don't need to request external read/write runtime permissions.
@@ -128,6 +131,7 @@ public class ProfileActivity extends AppCompatActivity {
   @Override
   public void onActivityResult(int requestCode, int resultCode, Intent data) {
     super.onActivityResult(requestCode, resultCode, data);
+    // Taken photo from camera
     if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
       if (resultCode == RESULT_OK) {
         // by this point we have the camera photo on disk
@@ -139,9 +143,54 @@ public class ProfileActivity extends AppCompatActivity {
         Toast.makeText(this, "Picture wasn't taken!", Toast.LENGTH_SHORT).show();
       }
     }
+    // Chosen from photo library
+    if ((data != null) && requestCode == PICK_PHOTO_CODE) {
+      Uri photoUri = data.getData();
+
+      // Load the image located at photoUri into selectedImage
+      Bitmap selectedImage = loadChosenPhotoFromUri(photoUri);
+
+      // Load the selected image into a preview
+      binding.ivProfile.setImageBitmap(selectedImage);
+    }
+
   }
 
+  // PICK_PHOTO_CODE is a constant integer
+  public final static int PICK_PHOTO_CODE = 1046;
 
+  // Trigger gallery selection for a photo
+  public void pickPhoto() {
+    // Create intent for picking a photo from the gallery
+    Intent intent = new Intent(Intent.ACTION_PICK,
+      MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+
+    // If you call startActivityForResult() using an intent that no app can handle, your app will crash.
+    // So as long as the result is not null, it's safe to use the intent.
+    if (intent.resolveActivity(getPackageManager()) != null) {
+      // Bring up gallery to select a photo
+      startActivityForResult(intent, PICK_PHOTO_CODE);
+    }
+  }
+
+  public Bitmap loadChosenPhotoFromUri(Uri photoUri) {
+    Bitmap image = null;
+    try {
+      // check version of Android on device
+      if(Build.VERSION.SDK_INT > 27){
+        // on newer versions of Android, use the new decodeBitmap method
+        ImageDecoder.Source source = ImageDecoder.createSource(this.getContentResolver(), photoUri);
+        image = ImageDecoder.decodeBitmap(source);
+      } else {
+        // support older versions of Android by using getBitmap
+        image = MediaStore.Images.Media.getBitmap(this.getContentResolver(), photoUri);
+      }
+    } catch (IOException e) {
+      Log.e(TAG, "loadFromUri: ", e);
+      e.printStackTrace();
+    }
+    return image;
+  }
 
 }
 
