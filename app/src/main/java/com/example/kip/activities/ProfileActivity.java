@@ -93,7 +93,7 @@ public class ProfileActivity extends PhotoActivity {
     if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
       if (resultCode == RESULT_OK) {
         // by this point we have the camera photo on disk
-        Bitmap takenImage = BitmapFactory.decodeFile(photoFile.getAbsolutePath());
+        Bitmap takenImage = rotateBitmapOrientation(photoFile.getAbsolutePath());
         // RESIZE BITMAP, see section below
         // Load the taken image into a preview
         binding.ivProfile.setImageBitmap(takenImage);
