@@ -44,8 +44,10 @@
 
     <Button
         android:id="@+id/btnSignUp"
+        style="@style/Widget.AppCompat.Button.Colored"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Sign Up"
-        android:onClick="onSignupClick"/>
+        android:enabled="false"
+        android:onClick="onSignUpClick"
+        android:text="Sign Up" />
 </LinearLayout>
