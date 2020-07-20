@@ -47,10 +47,15 @@ public class ProfileActivity extends PhotoActivity {
   private void populateUserData() {
     binding.tvUsername.setText(currentUser.getUsername());
     inflateFriendCount();
-
-    // TODO: Replace with actual profile image
+    String imageUrl = null;
+    try {
+      imageUrl = currentUser.fetch().getParseFile(KEY_PROFILE_IMAGE).getUrl();
+    } catch (ParseException e) {
+      // FIXME: Keeping getting Invalid session token
+      e.printStackTrace();
+    }
     Glide.with(this)
-      .load("https://static.independent.co.uk/s3fs-public/thumbnails/image/2017/09/01/15/zuckprofpic.jpg?w968h681")
+      .load(imageUrl)
       .circleCrop()
       .into(binding.ivProfile);
   }
