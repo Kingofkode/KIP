@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.example.kip.adapters.UsersAdapter;
+import com.example.kip.adapters.FriendRequestsAdapter;
 import com.example.kip.databinding.ActivityAddFriendBinding;
 import com.example.kip.models.FriendRequest;
 import com.parse.FindCallback;
@@ -22,8 +22,8 @@ public class AddFriendActivity extends AppCompatActivity {
   private static final String TAG = "AddFriendActivity";
 
   ActivityAddFriendBinding binding;
-  UsersAdapter adapter;
-  ArrayList<ParseUser> users;
+  FriendRequestsAdapter adapter;
+  ArrayList<FriendRequest> allFriendRequests;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -33,14 +33,9 @@ public class AddFriendActivity extends AppCompatActivity {
     setContentView(binding.getRoot());
 
     queryFriendRequests();
-    users = new ArrayList<>();
-    for (int i = 0; i < 30; i++) {
-      ParseUser user1 = new ParseUser();
-      user1.setUsername("Zuck");
-      users.add(user1);
-    }
+    allFriendRequests = new ArrayList<>();
 
-    adapter = new UsersAdapter(this, users, false);
+    adapter = new FriendRequestsAdapter(this, allFriendRequests);
 
     binding.rvUsers.setAdapter(adapter);
     binding.rvUsers.setLayoutManager(new LinearLayoutManager(this));
@@ -49,6 +44,7 @@ public class AddFriendActivity extends AppCompatActivity {
   private void queryFriendRequests() {
     ParseQuery<FriendRequest> friendRequestQuery = ParseQuery.getQuery(FriendRequest.class);
     friendRequestQuery.include(FriendRequest.KEY_SENDER_ID);
+    friendRequestQuery.whereMatches(FriendRequest.KEY_RECIPIENT_ID, ParseUser.getCurrentUser().getObjectId());
 
     friendRequestQuery.findInBackground(new FindCallback<FriendRequest>() {
       @Override
@@ -61,6 +57,8 @@ public class AddFriendActivity extends AppCompatActivity {
         for (FriendRequest friendRequest : friendRequests) {
           Log.i(TAG, "Friend request from: " + friendRequest.getSender().getUsername());
         }
+        allFriendRequests.addAll(friendRequests);
+        adapter.notifyDataSetChanged();
       }
     });
   }
