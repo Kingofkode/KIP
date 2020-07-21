@@ -5,6 +5,7 @@ import android.content.Context;
 
 import com.example.kip.models.Conversation;
 import com.example.kip.models.FriendRequest;
+import com.example.kip.models.Friendship;
 import com.example.kip.models.Message;
 import com.parse.Parse;
 import com.parse.ParseObject;
@@ -34,6 +35,7 @@ public class ParseApplication extends Application {
      ParseObject.registerSubclass(Message.class);
      ParseObject.registerSubclass(Conversation.class);
      ParseObject.registerSubclass(FriendRequest.class);
+     ParseObject.registerSubclass(Friendship.class);
   }
 
 }
