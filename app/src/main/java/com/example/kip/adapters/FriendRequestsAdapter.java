@@ -63,6 +63,7 @@ public class FriendRequestsAdapter extends RecyclerView.Adapter<FriendRequestsAd
       if (profileImageRef != null) {
         Glide.with(context)
           .load(profileImageRef.getUrl())
+          .placeholder(R.drawable.profile_placeholder)
           .circleCrop()
           .into(ivProfile);
       } else {
