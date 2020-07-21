@@ -17,48 +17,67 @@ import com.example.kip.R;
 import com.example.kip.activities.ProfileActivity;
 import com.example.kip.models.FriendRequest;
 import com.example.kip.models.Friendship;
-import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
-import com.parse.SaveCallback;
 
 import java.util.List;
 
-public class FriendRequestsAdapter extends RecyclerView.Adapter<FriendRequestsAdapter.ViewHolder> {
+public class FriendRequestsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+
+  private static final int TYPE_REQUEST = 0;
+  private static final int TYPE_USER = 1;
 
   Context context;
   List<FriendRequest> friendRequests;
+  List<ParseUser> searchedUsers;
 
-  public FriendRequestsAdapter(Context context, List<FriendRequest> friendRequests) {
+  public FriendRequestsAdapter(Context context, List<FriendRequest> friendRequests, List<ParseUser> searchedUsers) {
     this.context = context;
     this.friendRequests = friendRequests;
+    this.searchedUsers = searchedUsers;
   }
 
   @NonNull
   @Override
-  public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-    View view = LayoutInflater.from(context).inflate(R.layout.item_user, parent, false);
-    return new ViewHolder(view);
+  public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    View view = LayoutInflater.from(context).inflate(R.layout.item_friend_request, parent, false);
+    if (viewType == TYPE_REQUEST) {
+      return new RequestViewHolder(view);
+    } else {
+      return new UserViewHolder(view);
+    }
   }
 
   @Override
-  public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-    FriendRequest friendRequest = friendRequests.get(position);
-    holder.bind(friendRequest);
+  public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+    if (getItemViewType(position) == TYPE_REQUEST) {
+      ((RequestViewHolder) holder).bind(friendRequests.get(position));
+    } else { // User
+      ((UserViewHolder) holder).bind(searchedUsers.get(position - friendRequests.size()));
+    }
   }
 
   @Override
   public int getItemCount() {
-    return friendRequests.size();
+    return friendRequests.size() + searchedUsers.size();
   }
 
-  class ViewHolder extends RecyclerView.ViewHolder {
+  @Override
+  public int getItemViewType(int position) {
+    if (position >= friendRequests.size()) {
+      return TYPE_USER;
+    } else {
+      return TYPE_REQUEST;
+    }
+  }
+
+  class RequestViewHolder extends RecyclerView.ViewHolder {
 
     TextView tvUsername;
     ImageView ivProfile;
     Button btnAccept;
 
-    public ViewHolder(@NonNull View itemView) {
+    public RequestViewHolder(@NonNull View itemView) {
       super(itemView);
       tvUsername = itemView.findViewById(R.id.tvUsername);
       ivProfile = itemView.findViewById(R.id.ivProfile);
@@ -105,6 +124,46 @@ public class FriendRequestsAdapter extends RecyclerView.Adapter<FriendRequestsAd
       });
     }
 
+  }
+
+  class UserViewHolder extends RecyclerView.ViewHolder {
+
+    TextView tvUsername;
+    ImageView ivProfile;
+    Button btnAdd;
+
+    public UserViewHolder(@NonNull View itemView) {
+      super(itemView);
+      tvUsername = itemView.findViewById(R.id.tvUsername);
+      ivProfile = itemView.findViewById(R.id.ivProfile);
+      btnAdd = itemView.findViewById(R.id.btnAdd);
+      btnAdd.setText("Add");
+    }
+
+
+    public void bind(ParseUser user) {
+      // User name
+      tvUsername.setText(user.getUsername());
+
+      // Profile image
+      ParseFile profileImageRef = user.getParseFile(ProfileActivity.KEY_PROFILE_IMAGE);
+      if (profileImageRef != null) {
+        Glide.with(context)
+          .load(profileImageRef.getUrl())
+          .placeholder(R.drawable.profile_placeholder)
+          .circleCrop()
+          .into(ivProfile);
+      } else {
+        ivProfile.setImageResource(R.drawable.profile_placeholder);
+      }
+
+      btnAdd.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+          Toast.makeText(context, "Send friend request!", Toast.LENGTH_SHORT).show();
+        }
+      });
+    }
   }
 
 }
