@@ -126,7 +126,6 @@ public class AddFriendActivity extends AppCompatActivity {
       @Override
       public void done(List<ParseUser> foundUsers, ParseException e) {
         searchedUsers.clear();
-        // Filter out myself
         foundUsers.removeIf(new Predicate<ParseUser>() {
           @Override
           public boolean test(ParseUser parseUser) {
