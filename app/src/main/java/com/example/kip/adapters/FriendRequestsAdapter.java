@@ -83,7 +83,7 @@ public class FriendRequestsAdapter extends RecyclerView.Adapter<FriendRequestsAd
       btnAccept.setOnClickListener(new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-          // 1. Create Friendship both ways
+          // 1. Create friendship both ways for faster querying
           Friendship friendshipA = new Friendship();
           friendshipA.setUserA(ParseUser.getCurrentUser());
           friendshipA.setUserB(friendRequest.getSender());
@@ -94,8 +94,10 @@ public class FriendRequestsAdapter extends RecyclerView.Adapter<FriendRequestsAd
           friendshipB.setUserB(ParseUser.getCurrentUser());
           friendshipB.saveInBackground();
 
-          // 2. Delete friend request
+          // 2. Delete friend request in Parse
           friendRequest.deleteInBackground();
+
+          // 3. Delete in UI
           int position = friendRequests.indexOf(friendRequest);
           friendRequests.remove(position);
           notifyItemRemoved(position);
