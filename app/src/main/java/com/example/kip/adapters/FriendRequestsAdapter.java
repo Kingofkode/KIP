@@ -16,6 +16,7 @@ import com.bumptech.glide.Glide;
 import com.example.kip.R;
 import com.example.kip.activities.ProfileActivity;
 import com.example.kip.models.FriendRequest;
+import com.example.kip.models.Friendship;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
@@ -82,19 +83,22 @@ public class FriendRequestsAdapter extends RecyclerView.Adapter<FriendRequestsAd
       btnAccept.setOnClickListener(new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-          // 1. Add sender as my friend
-          ParseUser.getCurrentUser().add(ProfileActivity.KEY_FRIEND_IDS, friendRequest.getSender().getObjectId());
-          // 2. Add myself as the sender's friend
-          friendRequest.getSender().add(ProfileActivity.KEY_FRIEND_IDS, ParseUser.getCurrentUser().getObjectId());
+          // 1. Create Friendship both ways
+          Friendship friendshipA = new Friendship();
+          friendshipA.setUserA(ParseUser.getCurrentUser());
+          friendshipA.setUserB(friendRequest.getSender());
+          friendshipA.saveInBackground();
 
-          // Save changes to users
-          ParseUser.getCurrentUser().saveInBackground();
-          friendRequest.getSender().saveInBackground(new SaveCallback() {
-            @Override
-            public void done(ParseException e) {
-              Toast.makeText(context, e == null ? "Saved!" : "Uh oh", Toast.LENGTH_SHORT).show();
-            }
-          });
+          Friendship friendshipB = new Friendship();
+          friendshipB.setUserA(friendRequest.getSender());
+          friendshipB.setUserB(ParseUser.getCurrentUser());
+          friendshipB.saveInBackground();
+
+          // 2. Delete friend request
+          friendRequest.deleteInBackground();
+          int position = friendRequests.indexOf(friendRequest);
+          friendRequests.remove(position);
+          notifyItemRemoved(position);
         }
       });
     }
