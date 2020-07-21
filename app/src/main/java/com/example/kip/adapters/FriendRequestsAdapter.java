@@ -17,8 +17,10 @@ import com.example.kip.R;
 import com.example.kip.activities.ProfileActivity;
 import com.example.kip.models.FriendRequest;
 import com.example.kip.models.Friendship;
+import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
 import java.util.List;
 
@@ -141,7 +143,7 @@ public class FriendRequestsAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     }
 
 
-    public void bind(ParseUser user) {
+    public void bind(final ParseUser user) {
       // User name
       tvUsername.setText(user.getUsername());
 
@@ -160,7 +162,17 @@ public class FriendRequestsAdapter extends RecyclerView.Adapter<RecyclerView.Vie
       btnAdd.setOnClickListener(new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-          Toast.makeText(context, "Send friend request!", Toast.LENGTH_SHORT).show();
+          Toast.makeText(context, "Sent friend request!", Toast.LENGTH_SHORT).show();
+          FriendRequest friendRequest = new FriendRequest();
+          friendRequest.setRecipient(user);
+          friendRequest.setSender(ParseUser.getCurrentUser());
+          friendRequest.saveInBackground();
+
+          // Delete in UI
+          int position = searchedUsers.indexOf(user);
+          searchedUsers.remove(position);
+          notifyItemRemoved(position);
+
         }
       });
     }
