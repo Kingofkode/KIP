@@ -17,10 +17,8 @@ import com.example.kip.R;
 import com.example.kip.activities.ProfileActivity;
 import com.example.kip.models.FriendRequest;
 import com.example.kip.models.Friendship;
-import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
-import com.parse.SaveCallback;
 
 import java.util.List;
 
@@ -104,6 +102,7 @@ public class FriendRequestsAdapter extends RecyclerView.Adapter<RecyclerView.Vie
       btnAccept.setOnClickListener(new View.OnClickListener() {
         @Override
         public void onClick(View view) {
+          Toast.makeText(context, "Accepted friend request!", Toast.LENGTH_SHORT).show();
           // 1. Create friendship both ways for faster querying
           Friendship friendshipA = new Friendship();
           friendshipA.setUserA(ParseUser.getCurrentUser());
