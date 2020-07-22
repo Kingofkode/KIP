@@ -144,12 +144,6 @@ public class MessageActivity extends AppCompatActivity {
     });
   }
 
-  public void onMessageProfileClick(View view) {
-    Intent profileIntent = new Intent(this, ProfileActivity.class);
-    // TODO: Pass along the profile to view
-    this.startActivity(profileIntent);
-  }
-
   public void onSendClick(View view) {
     // Send message via Parse
     Message newMessage = new Message();
