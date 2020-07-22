@@ -163,6 +163,8 @@ public class MessageActivity extends AppCompatActivity {
     newMessage.setConversation(conversation);
 
     binding.etMessage.setText("");
+    conversation.setLastMessage(newMessage);
+    conversation.saveInBackground();
     newMessage.saveInBackground(new SaveCallback() {
       @Override
       public void done(ParseException e) {
