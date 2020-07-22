@@ -1,9 +1,11 @@
 package com.example.kip.fragments;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -12,6 +14,15 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.kip.adapters.ConversationsAdapter;
 import com.example.kip.databinding.FragmentConversationsBinding;
+import com.example.kip.models.Conversation;
+import com.example.kip.models.Message;
+import com.parse.FindCallback;
+import com.parse.ParseException;
+import com.parse.ParseQuery;
+import com.parse.ParseUser;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ConversationsFragment extends Fragment {
 
@@ -19,6 +30,7 @@ public class ConversationsFragment extends Fragment {
 
   FragmentConversationsBinding binding;
   private ConversationsAdapter adapter;
+  private List<Conversation> allConversations;
 
   // Required empty public constructor
   public ConversationsFragment() {
@@ -36,10 +48,34 @@ public class ConversationsFragment extends Fragment {
   @Override
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
-
-    adapter = new ConversationsAdapter(getContext());
+    allConversations = new ArrayList<>();
+    adapter = new ConversationsAdapter(getContext(), allConversations);
     binding.rvConversations.setAdapter(adapter);
     binding.rvConversations.setLayoutManager(new LinearLayoutManager(getContext()));
+
+    fetchConversations();
+  }
+
+  private void fetchConversations() {
+    ParseQuery<Conversation> conversationParseQuery = ParseQuery.getQuery(Conversation.class);
+    ArrayList<ParseUser> memberIDs = new ArrayList<>();
+    memberIDs.add(ParseUser.getCurrentUser());
+    conversationParseQuery.whereContainsAll(Conversation.KEY_MEMBER_IDS, memberIDs);
+    conversationParseQuery.include(Conversation.KEY_LAST_MESSAGE);
+    conversationParseQuery.include(Conversation.KEY_MEMBER_IDS);
+    conversationParseQuery.addDescendingOrder(Message.KEY_UPDATED_AT);
+    conversationParseQuery.findInBackground(new FindCallback<Conversation>() {
+      @Override
+      public void done(List<Conversation> conversations, ParseException e) {
+        if (e != null) {
+          Log.e(TAG, "Error fetching conversations: ", e);
+          Toast.makeText(getContext(), "Failed to load conversations", Toast.LENGTH_SHORT).show();
+          return;
+        }
+        allConversations.addAll(conversations);
+        adapter.notifyDataSetChanged();
+      }
+    });
 
   }
 }
