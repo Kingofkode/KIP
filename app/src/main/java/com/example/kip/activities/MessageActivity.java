@@ -114,6 +114,7 @@ public class MessageActivity extends AppCompatActivity {
   }
 
   private void setupPolling() {
+    refreshMessages();
     // Create a handler which can run code periodically
     final int POLL_INTERVAL = 1000; // milliseconds
     final Handler myHandler = new android.os.Handler();
