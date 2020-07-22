@@ -66,9 +66,9 @@ public class MessageActivity extends AppCompatActivity {
   private void fetchExistingConversation() {
     ParseQuery<Conversation> conversationParseQuery = ParseQuery.getQuery(Conversation.class);
 
-    ArrayList<String> memberIDs = new ArrayList<>();
-    memberIDs.add(recipient.getObjectId());
-    memberIDs.add(ParseUser.getCurrentUser().getObjectId());
+    ArrayList<ParseUser> memberIDs = new ArrayList<>();
+    memberIDs.add(recipient);
+    memberIDs.add(ParseUser.getCurrentUser());
 
     conversationParseQuery.whereContainsAll(Conversation.KEY_MEMBER_IDS, memberIDs);
     conversationParseQuery.setLimit(1);
@@ -132,7 +132,7 @@ public class MessageActivity extends AppCompatActivity {
     binding.rvMessages.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
       @Override
       public void onLayoutChange(View view, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
-        if (bottom < oldBottom) {
+        if (bottom < oldBottom && !allMessages.isEmpty()) {
           binding.rvMessages.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -155,6 +155,11 @@ public class MessageActivity extends AppCompatActivity {
     Message newMessage = new Message();
     newMessage.setBody(binding.etMessage.getText().toString());
     newMessage.setSender(ParseUser.getCurrentUser());
+    if (conversation == null) { // There was never a previous conversation
+      conversation = createConversation();
+      conversation.saveInBackground();
+      setupPolling();
+    }
     newMessage.setConversation(conversation);
 
     binding.etMessage.setText("");
@@ -166,5 +171,14 @@ public class MessageActivity extends AppCompatActivity {
         }
       }
     });
+  }
+
+  private Conversation createConversation() {
+    Conversation conversation = new Conversation();
+    ArrayList<ParseUser> members = new ArrayList<>();
+    members.add(ParseUser.getCurrentUser());
+    members.add(recipient);
+    conversation.setMembers(members);
+    return conversation;
   }
 }
