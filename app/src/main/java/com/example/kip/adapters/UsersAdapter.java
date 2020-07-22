@@ -1,6 +1,7 @@
 package com.example.kip.adapters;
 
-import android.content.Context;
+import android.app.Activity;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,30 +11,34 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.kip.R;
-
+import com.example.kip.activities.MessageActivity;
 import com.example.kip.activities.ProfileActivity;
 import com.example.kip.databinding.ItemFriendRequestBinding;
+import com.example.kip.models.Conversation;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
 
+import org.parceler.Parcels;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> {
 
-  Context context;
+  Activity activity;
   List<ParseUser> users;
   Boolean usersAreFriends; // Hides or shows relevant views
 
-  public UsersAdapter(Context context, List<ParseUser> users, Boolean usersAreFriends) {
-    this.context = context;
+  public UsersAdapter(Activity activity, List<ParseUser> users, Boolean usersAreFriends) {
     this.users = users;
     this.usersAreFriends = usersAreFriends;
+    this.activity = activity;
   }
 
   @NonNull
   @Override
   public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-    View view = LayoutInflater.from(context).inflate(R.layout.item_friend_request, parent, false);
+    View view = LayoutInflater.from(activity).inflate(R.layout.item_friend_request, parent, false);
     return new ViewHolder(view);
   }
 
@@ -57,13 +62,13 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
       binding = ItemFriendRequestBinding.bind(itemView);
     }
 
-    public void bind(ParseUser user) {
+    public void bind(final ParseUser user) {
 
       binding.tvUsername.setText(user.getUsername());
 
       ParseFile profileImageRef = user.getParseFile(ProfileActivity.KEY_PROFILE_IMAGE);
       if (profileImageRef != null) {
-        Glide.with(context)
+        Glide.with(activity)
           .load(profileImageRef.getUrl())
           .placeholder(R.drawable.profile_placeholder)
           .circleCrop()
@@ -73,7 +78,18 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
       }
 
       binding.btnAdd.setVisibility(usersAreFriends ? View.GONE : View.VISIBLE);
+
+      itemView.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+          Intent messagingIntent = new Intent(activity, MessageActivity.class);
+          messagingIntent.putExtra(ParseUser.class.getSimpleName(), Parcels.wrap(user));
+          activity.startActivity(messagingIntent);
+          activity.finish();
+        }
+      });
     }
+
   }
 
 

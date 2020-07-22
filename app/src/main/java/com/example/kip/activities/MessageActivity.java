@@ -10,6 +10,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.example.kip.adapters.MessagesAdapter;
 import com.example.kip.databinding.ActivityMessageBinding;
 import com.example.kip.models.Message;
+import com.parse.ParseUser;
+
+import org.parceler.Parcels;
 
 import java.util.ArrayList;
 
@@ -20,12 +23,16 @@ public class MessageActivity extends AppCompatActivity {
   ActivityMessageBinding binding;
   MessagesAdapter adapter;
   ArrayList<Message> messages;
+  ParseUser recipient;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     binding = ActivityMessageBinding.inflate(getLayoutInflater());
     setContentView(binding.getRoot());
+
+    // Get recipient
+    recipient = Parcels.unwrap(getIntent().getParcelableExtra(ParseUser.class.getSimpleName()));
 
     // Setup recycler view
     messages = new ArrayList<>();
@@ -41,17 +48,9 @@ public class MessageActivity extends AppCompatActivity {
   private void inflateWithMockMessages() {
     // Test data
     Message message1 = new Message();
-    message1.setBody("Hi Isaiah!");
-
-    Message message2 = new Message();
-    message2.setBody("Hi Zuck!");
-
-    Message message3 = new Message();
-    message3.setBody("Another");
+    message1.setBody("Hi " + recipient.getUsername());
 
     messages.add(message1);
-    messages.add(message2);
-    messages.add(message3);
   }
 
   // Scroll RecyclerView down when keyboard is presented
