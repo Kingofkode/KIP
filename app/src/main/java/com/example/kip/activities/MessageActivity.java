@@ -2,19 +2,28 @@ package com.example.kip.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.kip.adapters.MessagesAdapter;
 import com.example.kip.databinding.ActivityMessageBinding;
+import com.example.kip.models.Conversation;
 import com.example.kip.models.Message;
+import com.parse.FindCallback;
+import com.parse.ParseException;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
 import org.parceler.Parcels;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class MessageActivity extends AppCompatActivity {
 
@@ -22,8 +31,10 @@ public class MessageActivity extends AppCompatActivity {
 
   ActivityMessageBinding binding;
   MessagesAdapter adapter;
-  ArrayList<Message> messages;
+  ArrayList<Message> allMessages;
   ParseUser recipient;
+  Conversation conversation;
+  int oldMessagesSize = 0;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -35,22 +46,85 @@ public class MessageActivity extends AppCompatActivity {
     recipient = Parcels.unwrap(getIntent().getParcelableExtra(ParseUser.class.getSimpleName()));
 
     // Setup recycler view
-    messages = new ArrayList<>();
-    inflateWithMockMessages();
+    allMessages = new ArrayList<>();
 
-    adapter = new MessagesAdapter(this, messages);
+    adapter = new MessagesAdapter(this, allMessages);
 
     binding.rvMessages.setAdapter(adapter);
-    binding.rvMessages.setLayoutManager(new LinearLayoutManager(this));
+
+    binding.rvMessages.setLayoutManager(configureLayoutManager());
+
     setupKeyboardListener();
+    fetchExistingConversation();
   }
 
-  private void inflateWithMockMessages() {
-    // Test data
-    Message message1 = new Message();
-    message1.setBody("Hi " + recipient.getUsername());
+  private LinearLayoutManager configureLayoutManager() {
+    LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+    return layoutManager;
+  }
 
-    messages.add(message1);
+  private void fetchExistingConversation() {
+    ParseQuery<Conversation> conversationParseQuery = ParseQuery.getQuery(Conversation.class);
+
+    ArrayList<String> memberIDs = new ArrayList<>();
+    memberIDs.add(recipient.getObjectId());
+    memberIDs.add(ParseUser.getCurrentUser().getObjectId());
+
+    conversationParseQuery.whereContainsAll(Conversation.KEY_MEMBER_IDS, memberIDs);
+    conversationParseQuery.setLimit(1);
+
+    conversationParseQuery.findInBackground(new FindCallback<Conversation>() {
+      @Override
+      public void done(List<Conversation> conversations, ParseException e) {
+        // Should be 1 or 0
+        if (e != null) {
+          Log.e(TAG, "There was an issue with this query", e);
+          return;
+        }
+
+        if (!conversations.isEmpty()) {
+          conversation = conversations.get(0);
+          setupPolling();
+        }
+      }
+    });
+  }
+
+  private void refreshMessages() {
+    ParseQuery<Message> messageParseQuery = ParseQuery.getQuery(Message.class);
+    messageParseQuery.whereMatches(Message.KEY_CONVERSATION_ID, conversation.getObjectId());
+    messageParseQuery.addAscendingOrder(Message.KEY_CREATED_AT);
+    // TODO: Set limit
+    messageParseQuery.findInBackground(new FindCallback<Message>() {
+      @Override
+      public void done(List<Message> messages, ParseException e) {
+        if (e != null) {
+          Log.e(TAG, "Error fetching messages: ", e);
+          return;
+        }
+        allMessages.clear();
+        allMessages.addAll(messages);
+        adapter.notifyDataSetChanged();
+        if (allMessages.size() > oldMessagesSize) {
+          binding.rvMessages.smoothScrollToPosition(allMessages.size() - 1);
+        }
+        oldMessagesSize = allMessages.size();
+      }
+    });
+  }
+
+  private void setupPolling() {
+    // Create a handler which can run code periodically
+    final int POLL_INTERVAL = 1000; // milliseconds
+    final Handler myHandler = new android.os.Handler();
+    Runnable mRefreshMessagesRunnable = new Runnable() {
+      @Override
+      public void run() {
+        refreshMessages();
+        myHandler.postDelayed(this, POLL_INTERVAL);
+      }
+    };
+    myHandler.postDelayed(mRefreshMessagesRunnable, POLL_INTERVAL);
   }
 
   // Scroll RecyclerView down when keyboard is presented
@@ -62,7 +136,7 @@ public class MessageActivity extends AppCompatActivity {
           binding.rvMessages.postDelayed(new Runnable() {
             @Override
             public void run() {
-              binding.rvMessages.smoothScrollToPosition(messages.size() - 1);
+              binding.rvMessages.smoothScrollToPosition(allMessages.size() - 1);
             }
           }, 100);
         }
@@ -77,12 +151,20 @@ public class MessageActivity extends AppCompatActivity {
   }
 
   public void onSendClick(View view) {
-    // TODO: Actually send message via Parse
+    // Send message via Parse
     Message newMessage = new Message();
     newMessage.setBody(binding.etMessage.getText().toString());
-    messages.add(newMessage);
-    int lastPosition = messages.size() - 1;
-    adapter.notifyItemInserted(lastPosition);
-    binding.rvMessages.smoothScrollToPosition(lastPosition);
+    newMessage.setSender(ParseUser.getCurrentUser());
+    newMessage.setConversation(conversation);
+
+    binding.etMessage.setText("");
+    newMessage.saveInBackground(new SaveCallback() {
+      @Override
+      public void done(ParseException e) {
+        if (e != null) {
+          Toast.makeText(MessageActivity.this, "Error Sending Message", Toast.LENGTH_SHORT).show();
+        }
+      }
+    });
   }
 }

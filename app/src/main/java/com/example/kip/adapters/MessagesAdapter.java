@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.kip.R;
 import com.example.kip.models.Message;
+import com.parse.ParseUser;
 
 import java.util.List;
 
@@ -49,7 +50,10 @@ public class MessagesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
   @Override
   public int getItemViewType(int position) {
-    return position % 2;
+    Message message = messages.get(position);
+    if (message.getSender().getObjectId().equals(ParseUser.getCurrentUser().getObjectId()))
+      return TYPE_SENT;
+    return TYPE_RECEIVED;
   }
 
   class ViewHolder extends RecyclerView.ViewHolder {
