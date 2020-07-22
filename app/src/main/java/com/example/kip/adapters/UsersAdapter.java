@@ -11,7 +11,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.kip.R;
 
+import com.example.kip.activities.ProfileActivity;
 import com.example.kip.databinding.ItemFriendRequestBinding;
+import com.parse.ParseFile;
 import com.parse.ParseUser;
 
 import java.util.List;
@@ -56,13 +58,19 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
     }
 
     public void bind(ParseUser user) {
-      // TODO: Load actual user
+
       binding.tvUsername.setText(user.getUsername());
 
-      Glide.with(context)
-        .load("https://static.independent.co.uk/s3fs-public/thumbnails/image/2017/09/01/15/zuckprofpic.jpg?w968h681")
-        .circleCrop()
-        .into(binding.ivProfile);
+      ParseFile profileImageRef = user.getParseFile(ProfileActivity.KEY_PROFILE_IMAGE);
+      if (profileImageRef != null) {
+        Glide.with(context)
+          .load(profileImageRef.getUrl())
+          .placeholder(R.drawable.profile_placeholder)
+          .circleCrop()
+          .into(binding.ivProfile);
+      } else {
+        binding.ivProfile.setImageResource(R.drawable.profile_placeholder);
+      }
 
       binding.btnAdd.setVisibility(usersAreFriends ? View.GONE : View.VISIBLE);
     }
