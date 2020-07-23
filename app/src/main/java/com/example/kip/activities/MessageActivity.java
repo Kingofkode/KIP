@@ -147,7 +147,7 @@ public class MessageActivity extends AppCompatActivity {
 
   public void onSendClick(View view) {
     // Send message via Parse
-    Message newMessage = new Message();
+    final Message newMessage = new Message();
     newMessage.setBody(binding.etMessage.getText().toString());
     newMessage.setSender(ParseUser.getCurrentUser());
     if (conversation == null) { // There was never a previous conversation
@@ -155,17 +155,19 @@ public class MessageActivity extends AppCompatActivity {
       conversation.saveInBackground();
       setupPolling();
     }
-    newMessage.setConversation(conversation);
 
+    newMessage.setConversation(conversation);
     binding.etMessage.setText("");
-    conversation.setLastMessage(newMessage);
-    conversation.saveInBackground();
+
     newMessage.saveInBackground(new SaveCallback() {
       @Override
       public void done(ParseException e) {
         if (e != null) {
+          Log.e(TAG, "Error sending message: ", e);
           Toast.makeText(MessageActivity.this, "Error Sending Message", Toast.LENGTH_SHORT).show();
         }
+        conversation.setLastMessage(newMessage);
+        conversation.saveInBackground();
       }
     });
   }
