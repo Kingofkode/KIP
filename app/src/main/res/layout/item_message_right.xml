@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:paddingVertical="4dp"
+    android:paddingLeft="64dp"
+    android:paddingRight="16dp">
 
     <TextView
         android:id="@+id/tvBody"
@@ -9,6 +12,8 @@
         android:layout_height="wrap_content"
         android:text="Hi from KIP!"
         android:layout_alignParentEnd="true"
-        android:padding="16dp"/>
+        android:textColor="@android:color/white"
+        android:background="@drawable/sent_bubble"
+        android:padding="8dp"/>
 
 </RelativeLayout>
