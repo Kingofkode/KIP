@@ -161,7 +161,6 @@ public class MessageActivity extends AppCompatActivity {
     newMessage.setSender(ParseUser.getCurrentUser());
     if (conversation == null) { // There was never a previous conversation
       conversation = createConversation();
-      conversation.saveInBackground();
     }
 
     newMessage.setConversation(conversation);
