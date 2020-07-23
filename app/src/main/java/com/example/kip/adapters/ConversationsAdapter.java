@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.kip.R;
+import com.example.kip.Utils;
 import com.example.kip.activities.MessageActivity;
 import com.example.kip.activities.ProfileActivity;
 import com.example.kip.databinding.ItemConversationBinding;
@@ -82,6 +83,9 @@ public class ConversationsAdapter extends RecyclerView.Adapter<ConversationsAdap
       } else {
         binding.ivProfile.setImageResource(R.drawable.profile_placeholder);
       }
+
+      // Inflate timestamp
+      binding.tvDate.setText(Utils.getTimestamp(conversation.getUpdatedAt()));
 
       // Click Listener
       final ParseUser finalRecipient = recipient;
