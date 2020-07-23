@@ -38,6 +38,9 @@ public class AddFriendActivity extends AppCompatActivity {
   List<ParseUser> searchedUsers;
   List<ParseUser> friends;
 
+  Boolean friendshipsLoaded = false;
+  Boolean friendRequestsLoaded = false;
+
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -67,6 +70,9 @@ public class AddFriendActivity extends AppCompatActivity {
         for (Friendship friendship : friendships) {
           friends.add(friendship.getUserB());
         }
+        friendshipsLoaded = true;
+        if (friendRequestsLoaded)
+          queryUsers("");
       }
     });
   }
@@ -89,6 +95,10 @@ public class AddFriendActivity extends AppCompatActivity {
         }
         allFriendRequests.addAll(friendRequests);
         adapter.notifyDataSetChanged();
+        friendRequestsLoaded = true;
+        if (friendshipsLoaded)
+          queryUsers("");
+
       }
     });
   }
