@@ -33,7 +33,7 @@ public class MessageActivity extends AppCompatActivity {
   ArrayList<Message> allMessages;
   ParseUser recipient;
   Conversation conversation;
-  int oldMessagesSize = 0;
+  int oldMessagesSize = 0; // Used to determine if a new message has been received between polls
   Runnable mRefreshMessagesRunnable;
   Handler myHandler;
 
