@@ -19,11 +19,14 @@ import androidx.appcompat.app.AlertDialog;
 import com.bumptech.glide.Glide;
 import com.example.kip.R;
 import com.example.kip.databinding.ActivityProfileBinding;
+import com.example.kip.models.Friendship;
+import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.LogOutCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
@@ -78,13 +81,17 @@ public class ProfileActivity extends PhotoActivity {
   }
 
   private void inflateFriendCount() {
-    List<String> friendIDs = currentUser.getList(KEY_FRIEND_IDS);
-    int friendCount = 0;
-    if (friendIDs != null) {
-      friendCount = friendIDs.size();
-    }
-    String friendCountString = getResources().getQuantityString(R.plurals.numberOfFriends, friendCount, friendCount);
-    binding.tvFriendCount.setText(friendCountString);
+    ParseQuery<Friendship> friendships = ParseQuery.getQuery(Friendship.class);
+    friendships.whereMatches(Friendship.KEY_USER_A, ParseUser.getCurrentUser().getObjectId());
+    friendships.findInBackground(new FindCallback<Friendship>() {
+      @Override
+      public void done(List<Friendship> friendships, ParseException e) {
+        int friendCount = friendships.size();
+        String friendCountString = getResources().getQuantityString(R.plurals.numberOfFriends, friendCount, friendCount);
+        binding.tvFriendCount.setText(friendCountString);
+      }
+    });
+
   }
 
   public void onProfilePictureClick(View view) {
