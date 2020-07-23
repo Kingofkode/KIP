@@ -38,6 +38,13 @@ public class ConversationsFragment extends Fragment {
   }
 
   @Override
+  public void onResume() {
+    super.onResume();
+    // Update conversation thread
+    fetchConversations();
+  }
+
+  @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
                            Bundle savedInstanceState) {
     // Inflate the layout for this fragment
@@ -53,7 +60,6 @@ public class ConversationsFragment extends Fragment {
     binding.rvConversations.setAdapter(adapter);
     binding.rvConversations.setLayoutManager(new LinearLayoutManager(getContext()));
 
-    fetchConversations();
   }
 
   private void fetchConversations() {
@@ -72,6 +78,7 @@ public class ConversationsFragment extends Fragment {
           Toast.makeText(getContext(), "Failed to load conversations", Toast.LENGTH_SHORT).show();
           return;
         }
+        allConversations.clear();
         allConversations.addAll(conversations);
         adapter.notifyDataSetChanged();
       }
