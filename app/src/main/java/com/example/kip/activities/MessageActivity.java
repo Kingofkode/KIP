@@ -1,6 +1,5 @@
 package com.example.kip.activities;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -35,6 +34,8 @@ public class MessageActivity extends AppCompatActivity {
   ParseUser recipient;
   Conversation conversation;
   int oldMessagesSize = 0;
+  Runnable mRefreshMessagesRunnable;
+  Handler myHandler;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -84,13 +85,15 @@ public class MessageActivity extends AppCompatActivity {
 
         if (!conversations.isEmpty()) {
           conversation = conversations.get(0);
-          setupPolling();
+          refreshMessages();
         }
       }
     });
   }
 
   private void refreshMessages() {
+    if (conversation == null)
+      return;
     ParseQuery<Message> messageParseQuery = ParseQuery.getQuery(Message.class);
     messageParseQuery.whereMatches(Message.KEY_CONVERSATION_ID, conversation.getObjectId());
     messageParseQuery.addAscendingOrder(Message.KEY_CREATED_AT);
@@ -113,19 +116,25 @@ public class MessageActivity extends AppCompatActivity {
     });
   }
 
-  private void setupPolling() {
-    refreshMessages();
+  private void startPolling() {
     // Create a handler which can run code periodically
     final int POLL_INTERVAL = 1000; // milliseconds
-    final Handler myHandler = new android.os.Handler();
-    Runnable mRefreshMessagesRunnable = new Runnable() {
+    myHandler = new android.os.Handler();
+    mRefreshMessagesRunnable = new Runnable() {
       @Override
       public void run() {
+        Log.i(TAG, "Request update");
         refreshMessages();
         myHandler.postDelayed(this, POLL_INTERVAL);
       }
     };
     myHandler.postDelayed(mRefreshMessagesRunnable, POLL_INTERVAL);
+  }
+
+  private void stopPolling() {
+    if (mRefreshMessagesRunnable != null && myHandler != null) {
+      myHandler.removeCallbacks(mRefreshMessagesRunnable);
+    }
   }
 
   // Scroll RecyclerView down when keyboard is presented
@@ -153,7 +162,6 @@ public class MessageActivity extends AppCompatActivity {
     if (conversation == null) { // There was never a previous conversation
       conversation = createConversation();
       conversation.saveInBackground();
-      setupPolling();
     }
 
     newMessage.setConversation(conversation);
@@ -179,5 +187,17 @@ public class MessageActivity extends AppCompatActivity {
     members.add(recipient);
     conversation.setMembers(members);
     return conversation;
+  }
+
+  @Override
+  protected void onPause() {
+    super.onPause();
+    stopPolling();
+  }
+
+  @Override
+  protected void onResume() {
+    super.onResume();
+    startPolling();
   }
 }
