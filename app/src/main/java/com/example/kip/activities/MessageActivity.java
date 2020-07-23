@@ -94,10 +94,11 @@ public class MessageActivity extends AppCompatActivity {
   private void refreshMessages() {
     if (conversation == null)
       return;
+
     ParseQuery<Message> messageParseQuery = ParseQuery.getQuery(Message.class);
     messageParseQuery.whereMatches(Message.KEY_CONVERSATION_ID, conversation.getObjectId());
     messageParseQuery.addAscendingOrder(Message.KEY_CREATED_AT);
-    // TODO: Set limit
+
     messageParseQuery.findInBackground(new FindCallback<Message>() {
       @Override
       public void done(List<Message> messages, ParseException e) {
@@ -162,10 +163,7 @@ public class MessageActivity extends AppCompatActivity {
     if (conversation == null) { // There was never a previous conversation
       conversation = createConversation();
     }
-
     newMessage.setConversation(conversation);
-    binding.etMessage.setText("");
-
     newMessage.saveInBackground(new SaveCallback() {
       @Override
       public void done(ParseException e) {
@@ -177,6 +175,7 @@ public class MessageActivity extends AppCompatActivity {
         conversation.saveInBackground();
       }
     });
+    binding.etMessage.setText("");
   }
 
   private Conversation createConversation() {
