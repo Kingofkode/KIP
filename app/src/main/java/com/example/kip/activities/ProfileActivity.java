@@ -32,6 +32,7 @@ import com.parse.SaveCallback;
 
 import java.io.File;
 import java.util.List;
+import com.facebook.FacebookSdk;
 
 public class ProfileActivity extends PhotoActivity {
 

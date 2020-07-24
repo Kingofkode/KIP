@@ -13,9 +13,20 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.kip.databinding.ActivityLoginBinding;
+import com.facebook.AccessToken;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.login.LoginResult;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
+
+import org.json.JSONObject;
+
+import java.util.Arrays;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -23,6 +34,7 @@ public class LoginActivity extends AppCompatActivity {
   public static final int REGISTRATION_REQUEST_CODE = 4;
 
   private ActivityLoginBinding binding;
+  CallbackManager callbackManager;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +49,45 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     setupTextWatchers();
+    setupFacebookLoginButton();
+  }
 
+  private void setupFacebookLoginButton() {
+    callbackManager = CallbackManager.Factory.create();
+    binding.loginButton.setReadPermissions(Arrays.asList("email"));
+    binding.loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+      @Override
+      public void onSuccess(LoginResult loginResult) {
+        fetchMyInfo(loginResult.getAccessToken());
+      }
+
+      @Override
+      public void onCancel() {
+
+      }
+
+      @Override
+      public void onError(FacebookException error) {
+
+      }
+    });
+  }
+
+  private void fetchMyInfo(AccessToken accessToken) {
+    GraphRequest request = GraphRequest.newMeRequest(
+      accessToken,
+      new GraphRequest.GraphJSONObjectCallback() {
+        @Override
+        public void onCompleted(
+          JSONObject object,
+          GraphResponse response) {
+          // Application code
+        }
+      });
+    Bundle parameters = new Bundle();
+    parameters.putString("fields", "id,name,link");
+    request.setParameters(parameters);
+    request.executeAsync();
   }
 
   // Enables / Disables login button depending on EditTexts
@@ -82,6 +132,9 @@ public class LoginActivity extends AppCompatActivity {
       Intent mainActivityIntent = new Intent(this, MainActivity.class);
       startActivity(mainActivityIntent);
       finish();
+    } else {
+      // Facebook SDK
+      callbackManager.onActivityResult(requestCode, resultCode, data);
     }
     super.onActivityResult(requestCode, resultCode, data);
   }

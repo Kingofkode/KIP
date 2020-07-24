@@ -8,4 +8,7 @@
         <item quantity="other">%d Friends</item>
     </plurals>
 
+    <string name="facebook_app_id">1969164203215968</string>
+    <string name="fb_login_protocol_scheme">fb1969164203215968</string>
+
 </resources>
