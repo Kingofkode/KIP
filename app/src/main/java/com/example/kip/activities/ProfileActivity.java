@@ -37,12 +37,11 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
+import org.json.JSONObject;
+
 import java.io.File;
 import java.util.Arrays;
 import java.util.List;
-import com.facebook.FacebookSdk;
-
-import org.json.JSONObject;
 
 public class ProfileActivity extends PhotoActivity {
 
