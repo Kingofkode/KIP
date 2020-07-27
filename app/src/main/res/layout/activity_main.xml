@@ -5,41 +5,23 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activities.MainActivity">
-    <LinearLayout
-        android:id="@+id/btnCarousel"
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar">
+        <include
+            layout="@layout/toolbar_main"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"/>
+    </com.google.android.material.appbar.AppBarLayout>
 
-        <Button
-            android:id="@+id/btnProfile"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Profile"
-            android:onClick="onProfileClick"/>
-
-        <Button
-            android:id="@+id/btnAddFriend"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Add Friend"
-            android:onClick="onAddFriendClick"/>
-
-        <Button
-            android:id="@+id/btnNewChat"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="New Chat"
-            android:onClick="onNewChatClick"/>
-    </LinearLayout>
     <FrameLayout
         android:id="@+id/flContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/btnCarousel"
+        android:layout_below="@id/appBar"
         android:layout_above="@+id/bottomNavigation"
         android:layout_marginTop="0dp" />
 

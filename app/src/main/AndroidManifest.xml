@@ -23,7 +23,9 @@
         <activity android:name=".activities.AddFriendActivity" />
         <activity android:name=".activities.ProfileActivity" />
         <activity android:name=".activities.RegistrationActivity" />
-        <activity android:name=".activities.MainActivity" />
+        <activity
+            android:name=".activities.MainActivity"
+            android:theme="@style/NoActionBar"/>
         <activity android:name=".activities.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
