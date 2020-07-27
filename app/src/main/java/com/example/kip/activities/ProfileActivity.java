@@ -101,7 +101,7 @@ public class ProfileActivity extends PhotoActivity {
         public void onCompleted(
           JSONObject object,
           GraphResponse response) {
-          // Create parse user from this info
+          // TODO: Store FB info in Parse
 
         }
       });
