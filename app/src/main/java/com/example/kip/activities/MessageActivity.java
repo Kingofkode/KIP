@@ -4,17 +4,23 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
+import androidx.appcompat.widget.Toolbar;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.bumptech.glide.Glide;
+import com.example.kip.R;
 import com.example.kip.adapters.MessagesAdapter;
 import com.example.kip.databinding.ActivityMessageBinding;
 import com.example.kip.models.Conversation;
 import com.example.kip.models.Message;
 import com.parse.FindCallback;
 import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
@@ -57,6 +63,27 @@ public class MessageActivity extends AppCompatActivity {
 
     setupKeyboardListener();
     fetchExistingConversation();
+    setupToolbar();
+  }
+
+  private void setupToolbar() {
+    Toolbar toolbar = findViewById(R.id.tbContact);
+    // Username
+    TextView tvUsername = toolbar.findViewById(R.id.tvUsername);
+    tvUsername.setText(recipient.getUsername());
+
+    // Profile picture
+    ImageView ivProfile = toolbar.findViewById(R.id.ivProfile);
+    ParseFile profileImageRef = recipient.getParseFile(ProfileActivity.KEY_PROFILE_IMAGE);
+    if (profileImageRef != null) {
+      Glide.with(this)
+        .load(profileImageRef.getUrl())
+        .placeholder(R.drawable.profile_placeholder)
+        .circleCrop()
+        .into(ivProfile);
+    } else {
+      ivProfile.setImageResource(R.drawable.profile_placeholder);
+    }
   }
 
   private LinearLayoutManager configureLayoutManager() {
