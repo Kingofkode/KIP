@@ -82,6 +82,11 @@ public class ProfileActivity extends PhotoActivity {
     }
 
     inflateProfile();
+    setupActionBar();
+  }
+
+  private void setupActionBar() {
+    getSupportActionBar().setTitle(user.getUsername());
   }
 
   private void setupFacebookLoginButton() {

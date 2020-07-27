@@ -44,6 +44,11 @@ public class NewMessageActivity extends AppCompatActivity {
     binding.etRecipient.requestFocus();
     queryFriendships();
     setupTextWatcher();
+    setupActionBar();
+  }
+
+  private void setupActionBar() {
+    getSupportActionBar().setTitle("New Message");
   }
 
   private void setupTextWatcher() {

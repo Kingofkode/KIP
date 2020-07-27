@@ -58,6 +58,11 @@ public class AddFriendActivity extends AppCompatActivity {
 
     binding.rvUsers.setAdapter(adapter);
     binding.rvUsers.setLayoutManager(new LinearLayoutManager(this));
+    setupActionBar();
+  }
+
+  private void setupActionBar() {
+    getSupportActionBar().setTitle("Add Friends");
   }
 
   private void queryFriendships() {
