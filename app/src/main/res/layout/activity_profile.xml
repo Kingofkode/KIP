@@ -35,22 +35,23 @@
         android:maxLines="1"
         android:text="45 Friends"
         android:textAlignment="center" />
-    <LinearLayout
-        android:layout_marginTop="16dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
 
-        <ImageView
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            app:srcCompat="@drawable/instagram_icon" />
-        <TextView
-            android:layout_marginLeft="8dp"
-            android:layout_width="match_parent"
-            android:layout_height="25dp"
-            android:gravity="center_vertical"
-            android:text="Link Instagram"/>
-    </LinearLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="25dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="16dp"
+        android:gravity="center_vertical"
+        android:text="Linked accounts: "
+        android:textStyle="bold" />
+
+    <com.facebook.login.widget.LoginButton
+        android:id="@+id/login_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity=""
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="30dp" />
+
 
 </LinearLayout>
