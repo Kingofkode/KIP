@@ -1,5 +1,6 @@
 package com.example.kip.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -84,6 +85,12 @@ public class MessageActivity extends AppCompatActivity {
     } else {
       ivProfile.setImageResource(R.drawable.profile_placeholder);
     }
+  }
+  
+  public void onNameProfileClick(View view) {
+    Intent profileIntent = new Intent(this, ProfileActivity.class);
+    profileIntent.putExtra(ParseUser.class.getSimpleName(), Parcels.wrap(recipient));
+    startActivity(profileIntent);
   }
 
   private LinearLayoutManager configureLayoutManager() {

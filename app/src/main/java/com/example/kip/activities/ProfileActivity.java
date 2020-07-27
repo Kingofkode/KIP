@@ -38,6 +38,7 @@ import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
 import org.json.JSONObject;
+import org.parceler.Parcels;
 
 import java.io.File;
 import java.util.Arrays;
@@ -52,7 +53,8 @@ public class ProfileActivity extends PhotoActivity {
 
   ActivityProfileBinding binding;
 
-  ParseUser currentUser;
+  ParseUser user;
+  Boolean isCurrentUser;
   CallbackManager callbackManager;
 
   @Override
@@ -61,21 +63,31 @@ public class ProfileActivity extends PhotoActivity {
     binding = ActivityProfileBinding.inflate(getLayoutInflater());
     setContentView(binding.getRoot());
 
-    currentUser = ParseUser.getCurrentUser();
-    currentUser.fetchInBackground(new GetCallback<ParseObject>() {
-      @Override
-      public void done(ParseObject object, ParseException e) {
-        inflateProfile();
-      }
-    });
+    // Check if user was passed to us
+    user = Parcels.unwrap(getIntent().getParcelableExtra(ParseUser.class.getSimpleName()));
+    if (user == null) {
+      user = ParseUser.getCurrentUser();
+      isCurrentUser = true;
+    } else {
+      isCurrentUser = false;
+    }
+
+    if (isCurrentUser) {
+      user.fetchInBackground(new GetCallback<ParseObject>() {
+        @Override
+        public void done(ParseObject object, ParseException e) {
+          inflateProfile();
+        }
+      });
+    }
+
     inflateProfile();
-    setupFacebookLoginButton();
   }
 
   private void setupFacebookLoginButton() {
     callbackManager = CallbackManager.Factory.create();
-    binding.loginButton.setReadPermissions(Arrays.asList("email"));
-    binding.loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+    binding.btnFacebook.setReadPermissions(Arrays.asList("user_link"));
+    binding.btnFacebook.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
       @Override
       public void onSuccess(LoginResult loginResult) {
         fetchMyInfo(loginResult.getAccessToken());
@@ -101,24 +113,33 @@ public class ProfileActivity extends PhotoActivity {
         public void onCompleted(
           JSONObject object,
           GraphResponse response) {
-          // TODO: Store FB info in Parse
 
         }
       });
     Bundle parameters = new Bundle();
-    parameters.putString("fields", "id,name,link");
+    parameters.putString("fields", "link,id,name");
     request.setParameters(parameters);
     request.executeAsync();
   }
 
   private void inflateProfile() {
-    binding.tvUsername.setText(currentUser.getUsername());
+    binding.tvUsername.setText(user.getUsername());
+    toggleFacebookButton();
     inflateProfileImage();
     inflateFriendCount();
   }
 
+  private void toggleFacebookButton() {
+    if (isCurrentUser) {
+      setupFacebookLoginButton();
+    } else {
+      // Hide Facebook sign in
+      binding.btnFacebook.setVisibility(View.GONE);
+    }
+  }
+
   private void inflateProfileImage() {
-    ParseFile imageFileReference = currentUser.getParseFile(KEY_PROFILE_IMAGE);
+    ParseFile imageFileReference = user.getParseFile(KEY_PROFILE_IMAGE);
     if (imageFileReference == null) {
       binding.ivProfile.setImageResource(R.drawable.profile_placeholder);
       return;
@@ -133,7 +154,7 @@ public class ProfileActivity extends PhotoActivity {
 
   private void inflateFriendCount() {
     ParseQuery<Friendship> friendships = ParseQuery.getQuery(Friendship.class);
-    friendships.whereMatches(Friendship.KEY_USER_A, ParseUser.getCurrentUser().getObjectId());
+    friendships.whereMatches(Friendship.KEY_USER_A, user.getObjectId());
     friendships.findInBackground(new FindCallback<Friendship>() {
       @Override
       public void done(List<Friendship> friendships, ParseException e) {
@@ -146,6 +167,8 @@ public class ProfileActivity extends PhotoActivity {
   }
 
   public void onProfilePictureClick(View view) {
+    if (!isCurrentUser)
+      return;
     String[] options = {"Take Photo", "Choose existing photo"};
     AlertDialog.Builder builder = new AlertDialog.Builder(this);
     builder.setItems(options, new DialogInterface.OnClickListener() {
@@ -196,9 +219,9 @@ public class ProfileActivity extends PhotoActivity {
   }
 
   private void saveProfilePicture(File photoFile) {
-    currentUser.put(KEY_PROFILE_IMAGE, new ParseFile(photoFile));
+    user.put(KEY_PROFILE_IMAGE, new ParseFile(photoFile));
     final ProgressDialog dialog = ProgressDialog.show(this, "", "Uploading ...", true);
-    currentUser.saveInBackground(new SaveCallback() {
+    user.saveInBackground(new SaveCallback() {
       @Override
       public void done(ParseException e) {
         dialog.dismiss();
@@ -216,8 +239,10 @@ public class ProfileActivity extends PhotoActivity {
 
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
-    MenuInflater inflater = getMenuInflater();
-    inflater.inflate(R.menu.profile_menu, menu);
+    if (isCurrentUser) {
+      MenuInflater inflater = getMenuInflater();
+      inflater.inflate(R.menu.profile_menu, menu);
+    }
     return true;
   }
 

@@ -42,16 +42,43 @@
         android:layout_marginLeft="0dp"
         android:layout_marginTop="16dp"
         android:gravity="center_vertical"
-        android:text="Linked accounts: "
+        android:text="Social Links"
+        android:textSize="18sp"
         android:textStyle="bold" />
 
     <com.facebook.login.widget.LoginButton
-        android:id="@+id/login_button"
+        android:id="@+id/btnFacebook"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity=""
         android:layout_marginTop="8dp"
         android:layout_marginBottom="30dp" />
+
+    <LinearLayout
+        android:id="@+id/fbLink"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingVertical="8dp"
+        android:visibility="gone"
+        tools:visibility="visible">
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            app:srcCompat="@drawable/facebook_icon" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:gravity="center"
+            android:paddingLeft="8dp"
+            android:text="Isaiah Suarez"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+
+
 
 
 </LinearLayout>
