@@ -34,12 +34,14 @@ public class AddFriendActivity extends AppCompatActivity {
 
   ActivityAddFriendBinding binding;
   FriendRequestsAdapter adapter;
-  List<FriendRequest> allFriendRequests;
+  List<FriendRequest> incomingFriendRequests;
   List<ParseUser> searchedUsers;
   List<ParseUser> friends;
+  List<FriendRequest> outgoingFriendRequests;
 
   Boolean friendshipsLoaded = false;
-  Boolean friendRequestsLoaded = false;
+  Boolean incomingFriendRequestsLoaded = false;
+  Boolean outgoingFriendRequestsLoaded = false;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -48,14 +50,14 @@ public class AddFriendActivity extends AppCompatActivity {
     binding = ActivityAddFriendBinding.inflate(getLayoutInflater());
     setContentView(binding.getRoot());
 
-    allFriendRequests = new ArrayList<>();
-    queryFriendRequests();
+    queryIncomingFriendRequests();
+    queryOutgoingFriendRequests();
 
     searchedUsers = new ArrayList<>();
-    friends = new ArrayList<>();
-    queryFriendships();
-    adapter = new FriendRequestsAdapter(this, allFriendRequests, searchedUsers);
 
+    queryFriendships();
+
+    adapter = new FriendRequestsAdapter(this, incomingFriendRequests, searchedUsers);
     binding.rvUsers.setAdapter(adapter);
     binding.rvUsers.setLayoutManager(new LinearLayoutManager(this));
     setupActionBar();
@@ -66,6 +68,7 @@ public class AddFriendActivity extends AppCompatActivity {
   }
 
   private void queryFriendships() {
+    friends = new ArrayList<>();
     ParseQuery<Friendship> friendships = ParseQuery.getQuery(Friendship.class);
     friendships.whereMatches(Friendship.KEY_USER_A, ParseUser.getCurrentUser().getObjectId());
     friendships.include(Friendship.KEY_USER_B);
@@ -76,13 +79,13 @@ public class AddFriendActivity extends AppCompatActivity {
           friends.add(friendship.getUserB());
         }
         friendshipsLoaded = true;
-        if (friendRequestsLoaded)
-          queryUsers("");
+        showFriendSuggestionsIfReady();
       }
     });
   }
 
-  private void queryFriendRequests() {
+  private void queryIncomingFriendRequests() {
+    incomingFriendRequests = new ArrayList<>();
     ParseQuery<FriendRequest> friendRequestQuery = ParseQuery.getQuery(FriendRequest.class);
     friendRequestQuery.include(FriendRequest.KEY_SENDER_ID);
     friendRequestQuery.whereMatches(FriendRequest.KEY_RECIPIENT_ID, ParseUser.getCurrentUser().getObjectId());
@@ -98,14 +101,39 @@ public class AddFriendActivity extends AppCompatActivity {
         for (FriendRequest friendRequest : friendRequests) {
           Log.i(TAG, "Friend request from: " + friendRequest.getSender().getUsername());
         }
-        allFriendRequests.addAll(friendRequests);
+        incomingFriendRequests.addAll(friendRequests);
         adapter.notifyDataSetChanged();
-        friendRequestsLoaded = true;
-        if (friendshipsLoaded)
-          queryUsers("");
-
+        incomingFriendRequestsLoaded = true;
+        showFriendSuggestionsIfReady();
       }
     });
+  }
+
+  private void queryOutgoingFriendRequests() {
+    outgoingFriendRequests = new ArrayList<>();
+
+    ParseQuery<FriendRequest> outgoingFriendReqQuery = ParseQuery.getQuery(FriendRequest.class);
+    outgoingFriendReqQuery.include(FriendRequest.KEY_RECIPIENT_ID);
+    outgoingFriendReqQuery.whereMatches(FriendRequest.KEY_SENDER_ID, ParseUser.getCurrentUser().getObjectId());
+
+    outgoingFriendReqQuery.findInBackground(new FindCallback<FriendRequest>() {
+      @Override
+      public void done(List<FriendRequest> friendRequestList, ParseException e) {
+        if (e != null) {
+          Log.e(TAG, "Error querying outgoing friend requests: ", e);
+          return;
+        }
+        outgoingFriendRequests.addAll(friendRequestList);
+        outgoingFriendRequestsLoaded = true;
+        showFriendSuggestionsIfReady();
+      }
+    });
+  }
+
+  private void showFriendSuggestionsIfReady() {
+    if (friendshipsLoaded && incomingFriendRequestsLoaded && outgoingFriendRequestsLoaded) {
+      queryUsers("");
+    }
   }
 
   @Override
@@ -152,9 +180,14 @@ public class AddFriendActivity extends AppCompatActivity {
               if (friend.getUsername().equals(parseUser.getUsername()))
                 return true;
             }
-            // Filter out friend requests
-            for (FriendRequest friendRequest : allFriendRequests) {
+            // Filter out incoming friend requests
+            for (FriendRequest friendRequest : incomingFriendRequests) {
               if (friendRequest.getSender().getUsername().equals(parseUser.getUsername()))
+                return true;
+            }
+            // Filter out outgoing friend requests
+            for (FriendRequest outgoingFriendRequest : outgoingFriendRequests) {
+              if (outgoingFriendRequest.getRecipient().getUsername().equals(parseUser.getUsername()))
                 return true;
             }
             return false;
