@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.kip">
+    package="com.fbu.kip">
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <!-- For choosing photos -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.pe rmission.WRITE_EXTERNAL_STORAGE" />
     <application
-        android:name=".ParseApplication"
+        android:name="com.fbu.kip.ParseApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -16,19 +16,19 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".activities.MessageActivity"
+            android:name="com.fbu.kip.activities.MessageActivity"
             android:theme="@style/NoActionBar">
         </activity>
         <activity
-            android:name=".activities.NewMessageActivity"
+            android:name="com.fbu.kip.activities.NewMessageActivity"
             android:windowSoftInputMode="stateVisible"/>
-        <activity android:name=".activities.AddFriendActivity" />
-        <activity android:name=".activities.ProfileActivity" />
-        <activity android:name=".activities.RegistrationActivity" />
+        <activity android:name="com.fbu.kip.activities.AddFriendActivity" />
+        <activity android:name="com.fbu.kip.activities.ProfileActivity" />
+        <activity android:name="com.fbu.kip.activities.RegistrationActivity" />
         <activity
-            android:name=".activities.MainActivity"
+            android:name="com.fbu.kip.activities.MainActivity"
             android:theme="@style/NoActionBar"/>
-        <activity android:name=".activities.LoginActivity">
+        <activity android:name="com.fbu.kip.activities.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
