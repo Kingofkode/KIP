@@ -1,6 +1,7 @@
 package com.fbu.kip.adapters;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,10 +11,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.fbu.kip.R;
+import com.fbu.kip.activities.MessageActivity;
 import com.fbu.kip.activities.ProfileActivity;
 import com.fbu.kip.databinding.ItemSuggestionBinding;
 import com.fbu.kip.models.Suggestion;
 import com.parse.ParseFile;
+import com.parse.ParseUser;
+
+import org.parceler.Parcels;
 
 import java.util.List;
 
@@ -54,7 +59,7 @@ public class SuggestionsAdapter extends RecyclerView.Adapter<SuggestionsAdapter.
       binding = ItemSuggestionBinding.bind(itemView);
     }
 
-    public void bind(Suggestion suggestion) {
+    public void bind(final Suggestion suggestion) {
       binding.tvUser.setText(suggestion.getRecipient().getUsername());
       binding.tvSuggestion.setText(suggestion.getBody());
 
@@ -70,6 +75,17 @@ public class SuggestionsAdapter extends RecyclerView.Adapter<SuggestionsAdapter.
         binding.ivProfile.setImageResource(R.drawable.profile_placeholder);
       }
 
+      // Click listener
+      itemView.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+          Intent newMessageIntent = new Intent(activity, MessageActivity.class);
+          newMessageIntent.putExtra(ParseUser.class.getSimpleName(), Parcels.wrap(suggestion.getRecipient()));
+          // Load the suggestion
+          newMessageIntent.putExtra(Suggestion.class.getSimpleName(), Parcels.wrap(suggestion));
+          activity.startActivity(newMessageIntent);
+        }
+      });
     }
   }
 

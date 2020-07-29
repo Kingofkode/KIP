@@ -19,6 +19,7 @@ import com.fbu.kip.adapters.MessagesAdapter;
 import com.fbu.kip.databinding.ActivityMessageBinding;
 import com.fbu.kip.models.Conversation;
 import com.fbu.kip.models.Message;
+import com.fbu.kip.models.Suggestion;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
@@ -65,6 +66,15 @@ public class MessageActivity extends AppCompatActivity {
     setupKeyboardListener();
     fetchExistingConversation();
     setupToolbar();
+    preFillSuggestionIfNeeded();
+  }
+
+  private void preFillSuggestionIfNeeded() {
+    Suggestion suggestion = Parcels.unwrap(getIntent().getParcelableExtra(Suggestion.class.getSimpleName()));
+    if (suggestion == null)
+      return;
+    binding.etMessage.setText(suggestion.getBody());
+    binding.etMessage.requestFocus();
   }
 
   private void setupToolbar() {
