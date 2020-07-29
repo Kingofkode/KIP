@@ -70,7 +70,7 @@ public class ConversationsAdapter extends RecyclerView.Adapter<ConversationsAdap
       binding.tvUser.setText(recipient.getUsername());
       // Inflate last message
       if (conversation.getLastMessage() != null) {
-        binding.tvLastMessage.setText(conversation.getLastMessage().getBody());
+        binding.tvBody.setText(conversation.getLastMessage().getBody());
       }
       // Load profile image or placeholder
       ParseFile profileImageRef = recipient.getParseFile(ProfileActivity.KEY_PROFILE_IMAGE);
