@@ -7,11 +7,11 @@ import org.parceler.Parcel;
 @Parcel
 public class Suggestion {
   ParseUser recipient;
-  String suggestion;
+  String body;
 
-  public Suggestion(ParseUser recipient, String suggestion) {
+  public Suggestion(ParseUser recipient, String body) {
     this.recipient = recipient;
-    this.suggestion = suggestion;
+    this.body = body;
   }
 
   // Required by Parcel
@@ -25,11 +25,11 @@ public class Suggestion {
     this.recipient = recipient;
   }
 
-  public String getSuggestion() {
-    return suggestion;
+  public String getBody() {
+    return body;
   }
 
-  public void setSuggestion(String suggestion) {
-    this.suggestion = suggestion;
+  public void setBody(String body) {
+    this.body = body;
   }
 }
