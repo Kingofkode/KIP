@@ -2,7 +2,6 @@ package com.fbu.kip.activities;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Editable;
@@ -37,8 +36,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.Arrays;
 
 public class LoginActivity extends AppCompatActivity {
@@ -51,6 +48,7 @@ public class LoginActivity extends AppCompatActivity {
 
   private ActivityLoginBinding binding;
   CallbackManager callbackManager;
+  ProgressDialog FBProgressDialog;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +73,7 @@ public class LoginActivity extends AppCompatActivity {
       @Override
       public void onSuccess(LoginResult loginResult) {
         fetchMyInfo(loginResult.getAccessToken());
+        FBProgressDialog = ProgressDialog.show(LoginActivity.this, "", "Logging in ...", true);
       }
 
       @Override
@@ -211,6 +210,9 @@ public class LoginActivity extends AppCompatActivity {
   }
 
   private void launchMainActivity() {
+    if (FBProgressDialog != null) {
+      FBProgressDialog.dismiss();
+    }
     Intent mainIntent = new Intent(this, MainActivity.class);
     startActivity(mainIntent);
     finish();
