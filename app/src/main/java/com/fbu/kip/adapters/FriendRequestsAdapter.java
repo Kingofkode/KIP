@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.fbu.kip.R;
+import com.fbu.kip.Utils;
 import com.fbu.kip.activities.ProfileActivity;
 import com.fbu.kip.models.FriendRequest;
 import com.fbu.kip.models.Friendship;
@@ -86,7 +87,7 @@ public class FriendRequestsAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     }
 
     public void bind(final FriendRequest friendRequest) {
-      tvUsername.setText(friendRequest.getSender().getUsername());
+      tvUsername.setText(Utils.getFullName(friendRequest.getSender()));
       ParseFile profileImageRef = friendRequest.getSender().getParseFile(ProfileActivity.KEY_PROFILE_IMAGE);
       if (profileImageRef != null) {
         Glide.with(context)
@@ -144,7 +145,7 @@ public class FriendRequestsAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
     public void bind(final ParseUser user) {
       // User name
-      tvUsername.setText(user.getUsername());
+      tvUsername.setText(Utils.getFullName(user));
 
       // Profile image
       ParseFile profileImageRef = user.getParseFile(ProfileActivity.KEY_PROFILE_IMAGE);

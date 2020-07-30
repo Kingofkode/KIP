@@ -98,9 +98,6 @@ public class AddFriendActivity extends AppCompatActivity {
           return;
         }
 
-        for (FriendRequest friendRequest : friendRequests) {
-          Log.i(TAG, "Friend request from: " + friendRequest.getSender().getUsername());
-        }
         incomingFriendRequests.addAll(friendRequests);
         adapter.notifyDataSetChanged();
         incomingFriendRequestsLoaded = true;
