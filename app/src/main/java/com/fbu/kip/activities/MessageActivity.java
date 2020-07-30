@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.bumptech.glide.Glide;
 import com.fbu.kip.R;
+import com.fbu.kip.Utils;
 import com.fbu.kip.adapters.MessagesAdapter;
 import com.fbu.kip.databinding.ActivityMessageBinding;
 import com.fbu.kip.models.Conversation;
@@ -81,7 +82,7 @@ public class MessageActivity extends AppCompatActivity {
     Toolbar toolbar = findViewById(R.id.tbContact);
     // Username
     TextView tvUsername = toolbar.findViewById(R.id.tvUsername);
-    tvUsername.setText(recipient.getUsername());
+    tvUsername.setText(Utils.getFullName(recipient));
 
     // Profile picture
     ImageView ivProfile = toolbar.findViewById(R.id.ivProfile);
