@@ -20,13 +20,6 @@ import com.bumptech.glide.Glide;
 import com.fbu.kip.R;
 import com.fbu.kip.databinding.ActivityProfileBinding;
 import com.fbu.kip.models.Friendship;
-import com.facebook.AccessToken;
-import com.facebook.CallbackManager;
-import com.facebook.FacebookCallback;
-import com.facebook.FacebookException;
-import com.facebook.GraphRequest;
-import com.facebook.GraphResponse;
-import com.facebook.login.LoginResult;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.LogOutCallback;
@@ -37,11 +30,9 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
-import org.json.JSONObject;
 import org.parceler.Parcels;
 
 import java.io.File;
-import java.util.Arrays;
 import java.util.List;
 
 public class ProfileActivity extends PhotoActivity {
@@ -55,7 +46,6 @@ public class ProfileActivity extends PhotoActivity {
 
   ParseUser user;
   Boolean isCurrentUser;
-  CallbackManager callbackManager;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -89,58 +79,13 @@ public class ProfileActivity extends PhotoActivity {
     getSupportActionBar().setTitle(user.getUsername());
   }
 
-  private void setupFacebookLoginButton() {
-    callbackManager = CallbackManager.Factory.create();
-    binding.btnFacebook.setReadPermissions(Arrays.asList("user_link"));
-    binding.btnFacebook.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
-      @Override
-      public void onSuccess(LoginResult loginResult) {
-        fetchMyInfo(loginResult.getAccessToken());
-      }
 
-      @Override
-      public void onCancel() {
 
-      }
-
-      @Override
-      public void onError(FacebookException error) {
-
-      }
-    });
-  }
-
-  private void fetchMyInfo(AccessToken accessToken) {
-    GraphRequest request = GraphRequest.newMeRequest(
-      accessToken,
-      new GraphRequest.GraphJSONObjectCallback() {
-        @Override
-        public void onCompleted(
-          JSONObject object,
-          GraphResponse response) {
-
-        }
-      });
-    Bundle parameters = new Bundle();
-    parameters.putString("fields", "link,id,name");
-    request.setParameters(parameters);
-    request.executeAsync();
-  }
 
   private void inflateProfile() {
     binding.tvUsername.setText(user.getUsername());
-    toggleFacebookButton();
     inflateProfileImage();
     inflateFriendCount();
-  }
-
-  private void toggleFacebookButton() {
-    if (isCurrentUser) {
-      setupFacebookLoginButton();
-    } else {
-      // Hide Facebook sign in
-      binding.btnFacebook.setVisibility(View.GONE);
-    }
   }
 
   private void inflateProfileImage() {
@@ -218,9 +163,6 @@ public class ProfileActivity extends PhotoActivity {
       // Load the selected image into a preview
       binding.ivProfile.setImageBitmap(selectedImage);
     }
-
-    // Facebook SDK
-    callbackManager.onActivityResult(requestCode, resultCode, data);
   }
 
   private void saveProfilePicture(File photoFile) {

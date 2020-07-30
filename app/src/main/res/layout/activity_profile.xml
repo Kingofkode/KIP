@@ -4,9 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.ProfileActivity"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="16dp"
+    tools:context=".activities.ProfileActivity">
 
 
     <ImageView
@@ -14,19 +14,19 @@
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_gravity="center"
-        tools:srcCompat="@tools:sample/avatars"
-        android:onClick="onProfilePictureClick"/>
+        android:onClick="onProfilePictureClick"
+        tools:srcCompat="@tools:sample/avatars" />
 
     <TextView
-        android:layout_marginTop="16dp"
         android:id="@+id/tvUsername"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:maxLines="1"
         android:text="Zuck"
         android:textAlignment="center"
         android:textSize="18sp"
-        android:textStyle="bold"
-        android:maxLines="1"/>
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/tvFriendCount"
@@ -35,50 +35,5 @@
         android:maxLines="1"
         android:text="45 Friends"
         android:textAlignment="center" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="25dp"
-        android:layout_marginLeft="0dp"
-        android:layout_marginTop="16dp"
-        android:gravity="center_vertical"
-        android:text="Social Links"
-        android:textSize="18sp"
-        android:textStyle="bold" />
-
-    <com.facebook.login.widget.LoginButton
-        android:id="@+id/btnFacebook"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity=""
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="30dp" />
-
-    <LinearLayout
-        android:id="@+id/fbLink"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingVertical="8dp"
-        android:visibility="gone"
-        tools:visibility="visible">
-
-        <ImageView
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            app:srcCompat="@drawable/facebook_icon" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="30dp"
-            android:gravity="center"
-            android:paddingLeft="8dp"
-            android:text="Isaiah Suarez"
-            android:textStyle="bold" />
-    </LinearLayout>
-
-
-
-
 
 </LinearLayout>
