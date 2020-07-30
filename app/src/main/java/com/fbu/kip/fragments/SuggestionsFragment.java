@@ -50,7 +50,7 @@ public class SuggestionsFragment extends Fragment {
   }
 
   private void generateSuggestions() {
-    final String[] suggestionMessages = {"Wanna grab lunch?", "Hey! It's been awhile. How've you been?", "How was that trip to Colorado?", "How'd the presentation go?", "How's post grad life?"};
+    final String[] suggestionMessages = {"Wanna grab lunch?", "Hey! It's been awhile. How've you been?", "How was that trip to Colorado?", "How'd the presentation go?", "How's post grad life?", "Want to go to Philz Coffee?"};
     // Fetch friendships
     ParseQuery<Friendship> friendshipParseQuery = ParseQuery.getQuery(Friendship.class);
     friendshipParseQuery.whereMatches(Friendship.KEY_USER_A, ParseUser.getCurrentUser().getObjectId());

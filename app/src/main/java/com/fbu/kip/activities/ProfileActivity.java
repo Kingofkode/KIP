@@ -17,6 +17,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 
 import com.bumptech.glide.Glide;
+import com.facebook.login.LoginManager;
 import com.fbu.kip.R;
 import com.fbu.kip.Utils;
 import com.fbu.kip.databinding.ActivityProfileBinding;
@@ -208,6 +209,8 @@ public class ProfileActivity extends PhotoActivity {
 
   private void logout() {
     final ProgressDialog dialog = ProgressDialog.show(this, "", "Logging out...", true);
+    // Logout of Facebook if necessary
+    LoginManager.getInstance().logOut();
     ParseUser.logOutInBackground(new LogOutCallback() {
       @Override
       public void done(ParseException e) {
