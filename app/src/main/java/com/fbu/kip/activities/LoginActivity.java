@@ -2,6 +2,8 @@ package com.fbu.kip.activities;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -9,9 +11,13 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.CustomTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -22,12 +28,17 @@ import com.facebook.login.LoginResult;
 import com.fbu.kip.databinding.ActivityLoginBinding;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 import com.parse.SignUpCallback;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Arrays;
 
 public class LoginActivity extends AppCompatActivity {
@@ -104,6 +115,9 @@ public class LoginActivity extends AppCompatActivity {
     request.executeAsync();
   }
 
+
+
+
   private void registerOrLoginWithFacebook(final String id, final String fullName) {
     // Determine if user already has an account
     ParseUser.logInInBackground(id, id, new LogInCallback() {
@@ -111,7 +125,7 @@ public class LoginActivity extends AppCompatActivity {
       public void done(ParseUser user, ParseException e) {
         if (e != null) {
           // Create a Parse user for this Facebook account
-          registerFacebookUser(id, fullName);
+          downloadFBProfilePicture(id, fullName);
         } else {
           // Successfully signed in with existing account!
           launchMainActivity();
@@ -120,11 +134,39 @@ public class LoginActivity extends AppCompatActivity {
     });
   }
 
-  private void registerFacebookUser(String id, String fullName) {
+  private void downloadFBProfilePicture(final String id, final String fullName) {
+    String imageURL = "https://graph.facebook.com/" + id + "/picture?type=large";
+    Glide.with(this)
+      .asFile()
+      .load(imageURL)
+      .into(new CustomTarget<File>() {
+        @Override
+        public void onResourceReady(@NonNull File resource, @Nullable Transition<? super File> transition) {
+          final ParseFile photo = new ParseFile(resource);
+          // Upload to Parse
+          photo.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+              registerFacebookUser(id, fullName, photo);
+            }
+          });
+
+        }
+
+        @Override
+        public void onLoadCleared(@Nullable Drawable placeholder) {
+
+        }
+      });
+  }
+
+  private void registerFacebookUser(String id, String fullName, ParseFile profileImageFile) {
     ParseUser newUser = new ParseUser();
     newUser.setUsername(id);
     newUser.setPassword(id);
     newUser.put(FULL_NAME, fullName);
+    newUser.put(ProfileActivity.KEY_PROFILE_IMAGE, profileImageFile);
+
     newUser.signUpInBackground(new SignUpCallback() {
       @Override
       public void done(ParseException e) {
