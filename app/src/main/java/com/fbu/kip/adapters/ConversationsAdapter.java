@@ -67,7 +67,7 @@ public class ConversationsAdapter extends RecyclerView.Adapter<ConversationsAdap
         recipient = conversation.getMembers().get(1);
       }
       // Inflate username
-      binding.tvUser.setText(recipient.getUsername());
+      binding.tvUser.setText(Utils.getFullName(recipient));
       // Inflate last message
       if (conversation.getLastMessage() != null) {
         binding.tvBody.setText(conversation.getLastMessage().getBody());

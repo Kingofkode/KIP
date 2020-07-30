@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.fbu.kip.R;
+import com.fbu.kip.Utils;
 import com.fbu.kip.activities.MessageActivity;
 import com.fbu.kip.activities.ProfileActivity;
 import com.fbu.kip.databinding.ItemSuggestionBinding;
@@ -60,7 +61,7 @@ public class SuggestionsAdapter extends RecyclerView.Adapter<SuggestionsAdapter.
     }
 
     public void bind(final Suggestion suggestion) {
-      binding.tvUser.setText(suggestion.getRecipient().getUsername());
+      binding.tvUser.setText(Utils.getFullName(suggestion.getRecipient()));
       binding.tvSuggestion.setText(suggestion.getBody());
 
       // Load profile image or placeholder
