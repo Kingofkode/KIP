@@ -7,6 +7,7 @@ import android.text.TextWatcher;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.fbu.kip.Utils;
 import com.fbu.kip.adapters.UsersAdapter;
 import com.fbu.kip.databinding.ActivityNewMessageBinding;
 import com.fbu.kip.models.Friendship;
@@ -89,7 +90,7 @@ public class NewMessageActivity extends AppCompatActivity {
   private void filterFriends(CharSequence query) {
     visibleFriends.clear();
     for (ParseUser friend : allFriends) {
-      if (friend.getUsername().contains(query))
+      if (Utils.getFullName(friend).contains(query))
         visibleFriends.add(friend);
     }
     adapter.notifyDataSetChanged();

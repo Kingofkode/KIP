@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.fbu.kip.R;
+import com.fbu.kip.Utils;
 import com.fbu.kip.activities.MessageActivity;
 import com.fbu.kip.activities.ProfileActivity;
 import com.fbu.kip.databinding.ItemFriendRequestBinding;
@@ -62,7 +63,7 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
 
     public void bind(final ParseUser user) {
 
-      binding.tvUsername.setText(user.getUsername());
+      binding.tvUsername.setText(Utils.getFullName(user));
 
       ParseFile profileImageRef = user.getParseFile(ProfileActivity.KEY_PROFILE_IMAGE);
       if (profileImageRef != null) {
