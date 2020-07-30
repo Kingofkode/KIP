@@ -18,6 +18,7 @@ import androidx.appcompat.app.AlertDialog;
 
 import com.bumptech.glide.Glide;
 import com.fbu.kip.R;
+import com.fbu.kip.Utils;
 import com.fbu.kip.databinding.ActivityProfileBinding;
 import com.fbu.kip.models.Friendship;
 import com.parse.FindCallback;
@@ -76,14 +77,16 @@ public class ProfileActivity extends PhotoActivity {
   }
 
   private void setupActionBar() {
-    getSupportActionBar().setTitle(user.getUsername());
+    if (getSupportActionBar() == null)
+      return;
+    getSupportActionBar().setTitle(Utils.getFullName(user));
   }
 
 
 
 
   private void inflateProfile() {
-    binding.tvUsername.setText(user.getUsername());
+    binding.tvUsername.setText(Utils.getFullName(user));
     inflateProfileImage();
     inflateFriendCount();
   }
