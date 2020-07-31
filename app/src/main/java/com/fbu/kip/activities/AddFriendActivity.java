@@ -204,7 +204,7 @@ public class AddFriendActivity extends AppCompatActivity {
         continue;
       outputUserList.add(user);
     }
-    // Sort
+    // Sort by when the user signed up
     class CreatedAtComparator implements Comparator<ParseUser> {
       @Override
       public int compare(ParseUser user1, ParseUser user2) {
@@ -213,7 +213,7 @@ public class AddFriendActivity extends AppCompatActivity {
         return user1.getCreatedAt().compareTo(user2.getCreatedAt());
       }
     }
-
+    // Sort by when the user updated their profile
     class UpdatedAtComparator implements Comparator<ParseUser> {
       @Override
       public int compare(ParseUser user1, ParseUser user2) {
@@ -222,7 +222,7 @@ public class AddFriendActivity extends AppCompatActivity {
         return user1.getUpdatedAt().compareTo(user2.getUpdatedAt());
       }
     }
-
+    // Sort alphabetically by name
     class NameComparator implements Comparator<ParseUser> {
       @Override
       public int compare(ParseUser user1, ParseUser user2) {
@@ -231,7 +231,7 @@ public class AddFriendActivity extends AppCompatActivity {
         return Utils.getFullName(user2).compareTo(Utils.getFullName(user1));
       }
     }
-
+    // Determine which type was selected and apply one of the sorts above
     switch (sortType) {
       case createdAt:
         Collections.sort(outputUserList, new CreatedAtComparator());
