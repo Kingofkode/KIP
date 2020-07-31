@@ -176,5 +176,5 @@ Top Right:
 - [x] Your app integrates with a SDK (Facebook SDK)
 - [x] Your app contains at least one more complex algorithm (talk over this with your manager)
 - [ ] Your app uses gesture recognizers (e.g. double tap to like, e.g. pinch to scale)
-- [ ] Your app use an animation (doesn’t have to be fancy) (e.g. fade in/out, e.g. animating a view growing and shrinking)
+- [x] Your app use an animation (doesn’t have to be fancy) (e.g. fade in/out, e.g. animating a view growing and shrinking)
 - [x] Your app incorporates an external library to add visual polish
