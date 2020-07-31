@@ -1,13 +1,11 @@
 package com.fbu.kip.activities;
 
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.widget.SearchView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,18 +13,22 @@ import androidx.core.view.MenuItemCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.fbu.kip.R;
+import com.fbu.kip.Utils;
 import com.fbu.kip.adapters.FriendRequestsAdapter;
 import com.fbu.kip.databinding.ActivityAddFriendBinding;
 import com.fbu.kip.models.FriendRequest;
 import com.fbu.kip.models.Friendship;
 import com.parse.FindCallback;
+import com.parse.Parse;
 import com.parse.ParseException;
+import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
-import java.util.function.Predicate;
 
 public class AddFriendActivity extends AppCompatActivity {
 
@@ -34,9 +36,10 @@ public class AddFriendActivity extends AppCompatActivity {
 
   ActivityAddFriendBinding binding;
   FriendRequestsAdapter adapter;
-  List<FriendRequest> incomingFriendRequests;
-  List<ParseUser> searchedUsers;
+  List<ParseUser> allUsers;
+  List<ParseUser> visibleUsers;
   List<ParseUser> friends;
+  List<FriendRequest> incomingFriendRequests;
   List<FriendRequest> outgoingFriendRequests;
 
   boolean friendshipsLoaded = false;
@@ -53,11 +56,12 @@ public class AddFriendActivity extends AppCompatActivity {
     queryIncomingFriendRequests();
     queryOutgoingFriendRequests();
 
-    searchedUsers = new ArrayList<>();
+    allUsers = new ArrayList<>();
+    visibleUsers = new ArrayList<>();
 
     queryFriendships();
 
-    adapter = new FriendRequestsAdapter(this, incomingFriendRequests, searchedUsers);
+    adapter = new FriendRequestsAdapter(this, incomingFriendRequests, visibleUsers);
     binding.rvUsers.setAdapter(adapter);
     binding.rvUsers.setLayoutManager(new LinearLayoutManager(this));
     setupActionBar();
@@ -129,7 +133,7 @@ public class AddFriendActivity extends AppCompatActivity {
 
   private void showFriendSuggestionsIfReady() {
     if (friendshipsLoaded && incomingFriendRequestsLoaded && outgoingFriendRequestsLoaded) {
-      queryUsers("");
+      loadAllUsers();
     }
   }
 
@@ -143,13 +147,13 @@ public class AddFriendActivity extends AppCompatActivity {
     searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
       @Override
       public boolean onQueryTextSubmit(String query) {
-        queryUsers(query);
+        updateVisibleUsers(query);
         return false;
       }
 
       @Override
-      public boolean onQueryTextChange(String newText) {
-        queryUsers(newText);
+      public boolean onQueryTextChange(String query) {
+        updateVisibleUsers(query);
         return false;
       }
     });
@@ -157,44 +161,69 @@ public class AddFriendActivity extends AppCompatActivity {
     return super.onCreateOptionsMenu(menu);
   }
 
-  private void queryUsers(String query) {
-    ParseQuery<ParseUser> userQuery = ParseQuery.getQuery(ParseUser.class);
-    userQuery.whereContains("username", query);
+  private void updateVisibleUsers(String query) {
+    List<ParseUser> newVisibleUsers = filteredAndSortedUsers(allUsers, query,  ParseUser.getCurrentUser(), friends, incomingFriendRequests, outgoingFriendRequests);
+    visibleUsers.clear();
+    visibleUsers.addAll(newVisibleUsers);
+    adapter.notifyDataSetChanged();
+  }
 
+  private void loadAllUsers() {
+    ParseQuery<ParseUser> userQuery = ParseQuery.getQuery(ParseUser.class);
     userQuery.findInBackground(new FindCallback<ParseUser>() {
-      @RequiresApi(api = Build.VERSION_CODES.N)
       @Override
       public void done(List<ParseUser> foundUsers, ParseException e) {
-        searchedUsers.clear();
-        foundUsers.removeIf(new Predicate<ParseUser>() {
-          @Override
-          public boolean test(ParseUser parseUser) {
-            // Filter out myself
-            if (parseUser.getUsername().equals(ParseUser.getCurrentUser().getUsername()))
-              return true;
-            // Filter out my friends
-            for (ParseUser friend : friends) {
-              if (friend.getUsername().equals(parseUser.getUsername()))
-                return true;
-            }
-            // Filter out incoming friend requests
-            for (FriendRequest friendRequest : incomingFriendRequests) {
-              if (friendRequest.getSender().getUsername().equals(parseUser.getUsername()))
-                return true;
-            }
-            // Filter out outgoing friend requests
-            for (FriendRequest outgoingFriendRequest : outgoingFriendRequests) {
-              if (outgoingFriendRequest.getRecipient().getUsername().equals(parseUser.getUsername()))
-                return true;
-            }
-            return false;
-          }
-        });
-        searchedUsers.addAll(foundUsers);
+        allUsers = foundUsers;
+        List<ParseUser> filteredUsers = filteredAndSortedUsers(allUsers, "", ParseUser.getCurrentUser(), friends, incomingFriendRequests, outgoingFriendRequests);
+        visibleUsers.clear();
+        visibleUsers.addAll(filteredUsers);
         adapter.notifyDataSetChanged();
       }
     });
   }
 
+  private List<ParseUser> filteredAndSortedUsers(List<ParseUser> inputUserList, String queryString, ParseUser myself, List<ParseUser> myFriends, List<FriendRequest> incomingFriendRequests, List<FriendRequest> outgoingFriendRequests) {
+    List<ParseUser> outputUserList = new ArrayList<>();
+    // Filter
+    for (ParseUser user : inputUserList) {
+      if (!Utils.getFullName(user).contains(queryString)) // Skip if user's name doesn't even match the string the user is querying for
+        continue;
+      if (myself.getObjectId().equals(user.getObjectId())) // Filter out myself
+        continue;
+      if (containsUser(myFriends, user)) // Filter out my friends
+        continue;
+      if (hasSentFriendRequest(incomingFriendRequests, user, true)) // Filter out incoming friend requests
+        continue;
+      if (hasSentFriendRequest(outgoingFriendRequests, user, false)) // Filter out outgoing friend requests
+        continue;
+      outputUserList.add(user);
+    }
+    // Sort
+    class DateComparator implements Comparator<ParseUser> {
+      @Override
+      public int compare(ParseUser user1, ParseUser user2) {
+        return user2.getCreatedAt().compareTo(user1.getCreatedAt());
+      }
+    }
+    return outputUserList;
+  }
+
+  boolean containsUser(List<ParseUser> userList, ParseUser target) {
+    for (ParseObject user : userList) {
+      if (user.getObjectId().equals(target.getObjectId()))
+        return true;
+    }
+    return false;
+  }
+
+  private boolean hasSentFriendRequest(List<FriendRequest> friendRequests, ParseUser target, boolean isIncoming) {
+    // Filter out incoming friend requests
+    for (FriendRequest friendRequest : friendRequests) {
+      ParseUser subject = isIncoming ? friendRequest.getSender() : friendRequest.getRecipient();
+      if (subject.getObjectId().equals(target.getObjectId()))
+        return true;
+    }
+    return false;
+  }
 
 }
