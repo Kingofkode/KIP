@@ -162,7 +162,7 @@ public class AddFriendActivity extends AppCompatActivity {
   }
 
   private void updateVisibleUsers(String query) {
-    List<ParseUser> newVisibleUsers = filteredAndSortedUsers(allUsers, query,  ParseUser.getCurrentUser(), friends, incomingFriendRequests, outgoingFriendRequests);
+    List<ParseUser> newVisibleUsers = filteredAndSortedUsers(allUsers, query, SortType.createdAt, true, ParseUser.getCurrentUser(), friends, incomingFriendRequests, outgoingFriendRequests);
     visibleUsers.clear();
     visibleUsers.addAll(newVisibleUsers);
     adapter.notifyDataSetChanged();
@@ -174,7 +174,7 @@ public class AddFriendActivity extends AppCompatActivity {
       @Override
       public void done(List<ParseUser> foundUsers, ParseException e) {
         allUsers = foundUsers;
-        List<ParseUser> filteredUsers = filteredAndSortedUsers(allUsers, "", ParseUser.getCurrentUser(), friends, incomingFriendRequests, outgoingFriendRequests);
+        List<ParseUser> filteredUsers = filteredAndSortedUsers(allUsers, "", SortType.createdAt, true, ParseUser.getCurrentUser(), friends, incomingFriendRequests, outgoingFriendRequests);
         visibleUsers.clear();
         visibleUsers.addAll(filteredUsers);
         adapter.notifyDataSetChanged();
@@ -182,7 +182,13 @@ public class AddFriendActivity extends AppCompatActivity {
     });
   }
 
-  private List<ParseUser> filteredAndSortedUsers(List<ParseUser> inputUserList, String queryString, ParseUser myself, List<ParseUser> myFriends, List<FriendRequest> incomingFriendRequests, List<FriendRequest> outgoingFriendRequests) {
+  enum SortType {
+    createdAt,
+    updatedAt,
+    name,
+  }
+
+  private List<ParseUser> filteredAndSortedUsers(List<ParseUser> inputUserList, String queryString, SortType sortType, final boolean ascending, ParseUser myself, List<ParseUser> myFriends, List<FriendRequest> incomingFriendRequests, List<FriendRequest> outgoingFriendRequests) {
     List<ParseUser> outputUserList = new ArrayList<>();
     // Filter
     for (ParseUser user : inputUserList) {
@@ -199,12 +205,45 @@ public class AddFriendActivity extends AppCompatActivity {
       outputUserList.add(user);
     }
     // Sort
-    class DateComparator implements Comparator<ParseUser> {
+    class CreatedAtComparator implements Comparator<ParseUser> {
       @Override
       public int compare(ParseUser user1, ParseUser user2) {
-        return user2.getCreatedAt().compareTo(user1.getCreatedAt());
+        if (ascending)
+          return user2.getCreatedAt().compareTo(user1.getCreatedAt());
+        return user1.getCreatedAt().compareTo(user2.getCreatedAt());
       }
     }
+
+    class UpdatedAtComparator implements Comparator<ParseUser> {
+      @Override
+      public int compare(ParseUser user1, ParseUser user2) {
+        if (ascending)
+          return user2.getUpdatedAt().compareTo(user1.getUpdatedAt());
+        return user1.getUpdatedAt().compareTo(user2.getUpdatedAt());
+      }
+    }
+
+    class NameComparator implements Comparator<ParseUser> {
+      @Override
+      public int compare(ParseUser user1, ParseUser user2) {
+        if (ascending)
+          return Utils.getFullName(user1).compareTo(Utils.getFullName(user2));
+        return Utils.getFullName(user2).compareTo(Utils.getFullName(user1));
+      }
+    }
+
+    switch (sortType) {
+      case createdAt:
+        Collections.sort(outputUserList, new CreatedAtComparator());
+        break;
+      case updatedAt:
+        Collections.sort(outputUserList, new UpdatedAtComparator());
+        break;
+      case name:
+        Collections.sort(outputUserList, new NameComparator());
+        break;
+    }
+
     return outputUserList;
   }
 
