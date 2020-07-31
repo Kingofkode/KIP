@@ -23,4 +23,6 @@ public class Utils {
     }
     return fullName;
   }
+
+  public final static String[] suggestionMessages = {"Wanna grab lunch?", "Hey! It's been awhile. How've you been?", "How was that trip to Colorado?", "How'd the presentation go?", "How's post grad life?", "Want to go to Philz Coffee?"};
 }

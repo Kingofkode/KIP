@@ -11,6 +11,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.fbu.kip.Utils;
 import com.fbu.kip.adapters.SuggestionsAdapter;
 import com.fbu.kip.databinding.FragmentSuggestionsBinding;
 import com.fbu.kip.models.Friendship;
@@ -50,7 +51,7 @@ public class SuggestionsFragment extends Fragment {
   }
 
   private void generateSuggestions() {
-    final String[] suggestionMessages = {"Wanna grab lunch?", "Hey! It's been awhile. How've you been?", "How was that trip to Colorado?", "How'd the presentation go?", "How's post grad life?", "Want to go to Philz Coffee?"};
+
     // Fetch friendships
     ParseQuery<Friendship> friendshipParseQuery = ParseQuery.getQuery(Friendship.class);
     friendshipParseQuery.whereMatches(Friendship.KEY_USER_A, ParseUser.getCurrentUser().getObjectId());
@@ -64,7 +65,7 @@ public class SuggestionsFragment extends Fragment {
         }
         for (int i = 0; i < friendshipList.size(); i++) {
           // Create suggestion for each one. Cycling through the list of suggestions.
-          Suggestion suggestion = new Suggestion(friendshipList.get(i).getUserB(), suggestionMessages[i % suggestionMessages.length]);
+          Suggestion suggestion = new Suggestion(friendshipList.get(i).getUserB(), Utils.suggestionMessages[i % Utils.suggestionMessages.length]);
           suggestions.add(suggestion);
         }
         adapter.notifyDataSetChanged();
