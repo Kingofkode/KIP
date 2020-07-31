@@ -8,6 +8,8 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -24,6 +26,7 @@ import com.facebook.FacebookException;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.login.LoginResult;
+import com.fbu.kip.R;
 import com.fbu.kip.databinding.ActivityLoginBinding;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
@@ -64,6 +67,14 @@ public class LoginActivity extends AppCompatActivity {
 
     setupTextWatchers();
     setupFacebookLoginButton();
+    performKIPAnimation();
+  }
+
+  private void performKIPAnimation() {
+    Animation animation = AnimationUtils.loadAnimation(this, R.anim.scale);
+    animation.reset();
+    binding.tvKIP.clearAnimation();
+    binding.tvKIP.startAnimation(animation);
   }
 
   private void setupFacebookLoginButton() {
