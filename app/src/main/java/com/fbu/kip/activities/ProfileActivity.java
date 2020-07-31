@@ -47,7 +47,7 @@ public class ProfileActivity extends PhotoActivity {
   ActivityProfileBinding binding;
 
   ParseUser user;
-  Boolean isCurrentUser;
+  boolean isCurrentUser;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {

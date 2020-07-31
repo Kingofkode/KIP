@@ -205,7 +205,7 @@ public class LoginActivity extends AppCompatActivity {
   }
 
 
-  private Boolean canLogin() {
+  private boolean canLogin() {
     return !binding.etUsername.getText().toString().isEmpty() && !binding.etPassword.getText().toString().isEmpty();
   }
 

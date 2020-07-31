@@ -26,9 +26,9 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.ViewHolder> 
 
   Activity activity;
   List<ParseUser> users;
-  Boolean usersAreFriends; // Hides or shows relevant views
+  boolean usersAreFriends; // Hides or shows relevant views
 
-  public UsersAdapter(Activity activity, List<ParseUser> users, Boolean usersAreFriends) {
+  public UsersAdapter(Activity activity, List<ParseUser> users, boolean usersAreFriends) {
     this.users = users;
     this.usersAreFriends = usersAreFriends;
     this.activity = activity;

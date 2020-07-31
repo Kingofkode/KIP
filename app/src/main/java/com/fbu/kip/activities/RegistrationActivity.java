@@ -57,7 +57,7 @@ public class RegistrationActivity extends AppCompatActivity {
 
   }
 
-  private Boolean canSignUp() {
+  private boolean canSignUp() {
     String username = binding.etUsername.getText().toString();
     String password = binding.etPassword.getText().toString();
     String confirmPassword = binding.etConfirmPassword.getText().toString();

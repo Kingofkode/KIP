@@ -39,9 +39,9 @@ public class AddFriendActivity extends AppCompatActivity {
   List<ParseUser> friends;
   List<FriendRequest> outgoingFriendRequests;
 
-  Boolean friendshipsLoaded = false;
-  Boolean incomingFriendRequestsLoaded = false;
-  Boolean outgoingFriendRequestsLoaded = false;
+  boolean friendshipsLoaded = false;
+  boolean incomingFriendRequestsLoaded = false;
+  boolean outgoingFriendRequestsLoaded = false;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
