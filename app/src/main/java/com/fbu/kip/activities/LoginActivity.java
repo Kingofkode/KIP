@@ -124,6 +124,7 @@ public class LoginActivity extends AppCompatActivity {
       public void done(ParseUser user, ParseException e) {
         if (e != null) {
           // Create a Parse user for this Facebook account
+          FBProgressDialog.setMessage("Downloading Facebook profile picture ...");
           downloadFBProfilePicture(id, fullName);
         } else {
           // Successfully signed in with existing account!
@@ -143,9 +144,11 @@ public class LoginActivity extends AppCompatActivity {
         public void onResourceReady(@NonNull File resource, @Nullable Transition<? super File> transition) {
           final ParseFile photo = new ParseFile(resource);
           // Upload to Parse
+          FBProgressDialog.setMessage("Uploading profile picture to Parse ...");
           photo.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
+              FBProgressDialog.setMessage("Registering Parse user ...");
               registerFacebookUser(id, fullName, photo);
             }
           });
