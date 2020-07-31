@@ -19,13 +19,15 @@
             android:src="@drawable/ic_account_circle"
             android:theme="@style/Base.ThemeOverlay.AppCompat.Dark"
             android:layout_alignParentStart="true"/>
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
+            android:fontFamily="@font/bubble"
             android:text="KIP"
             android:textColor="@android:color/white"
-            android:textSize="18sp"
+            android:textSize="30sp"
             android:textStyle="bold" />
 
         <LinearLayout

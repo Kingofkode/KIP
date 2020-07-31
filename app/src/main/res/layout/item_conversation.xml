@@ -34,6 +34,7 @@
                 android:layout_toStartOf="@+id/tvDate"
                 android:maxLines="1"
                 android:text="Zuck"
+                android:textColor="@android:color/black"
                 android:textStyle="bold" />
 
             <TextView
@@ -51,6 +52,7 @@
             android:layout_height="wrap_content"
             android:maxLines="1"
             android:text="Hi Isaiah!"
+            android:textColor="@android:color/black"
             android:textAlignment="textStart" />
     </LinearLayout>
 </LinearLayout>

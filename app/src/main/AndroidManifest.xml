@@ -40,7 +40,8 @@
             android:theme="@style/NoActionBar" />
         <activity
             android:name="com.fbu.kip.activities.LoginActivity"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:theme="@style/NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

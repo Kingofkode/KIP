@@ -49,6 +49,7 @@
                 android:layout_marginEnd="0dp"
                 android:maxLines="1"
                 android:text="Zuck"
+                android:textColor="@android:color/black"
                 android:textStyle="bold" />
 
         </RelativeLayout>
@@ -59,6 +60,7 @@
             android:layout_height="wrap_content"
             android:maxLines="1"
             android:text="Hi Isaiah!"
+            android:textColor="@android:color/black"
             android:textAlignment="textStart" />
     </LinearLayout>
 </LinearLayout>
