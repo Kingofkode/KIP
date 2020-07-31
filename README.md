@@ -167,26 +167,14 @@ Top Right:
    - Profile activity
       - (Update/PUT) Unfriend a profile
       - (Update/PUT) Update user profile image
-#### [OPTIONAL:] Existing API Endpoints
-##### An API Of Ice And Fire
-- Base URL - [http://www.anapioficeandfire.com/api](http://www.anapioficeandfire.com/api)
-
-   HTTP Verb | Endpoint | Description
-   ----------|----------|------------
-    `GET`    | /characters | get all characters
-    `GET`    | /characters/?name=name | return specific character by name
-    `GET`    | /houses   | get all houses
-    `GET`    | /houses/?name=name | return specific house by name
-
-##### Game of Thrones API
-- Base URL - [https://api.got.show/api](https://api.got.show/api)
-
-   HTTP Verb | Endpoint | Description
-   ----------|----------|------------
-    `GET`    | /cities | gets all cities
-    `GET`    | /cities/byId/:id | gets specific city by :id
-    `GET`    | /continents | gets all continents
-    `GET`    | /continents/byId/:id | gets specific continent by :id
-    `GET`    | /regions | gets all regions
-    `GET`    | /regions/byId/:id | gets specific region by :id
-    `GET`    | /characters/paths/:name | gets a character's path with a given name
+# App Expectations
+- [x] Your app has multiple views
+- [x] Your app interacts with a database (e.g. Parse)
+- [x] You can log in/log out of your app as a user
+- [x] You can sign up with a new user profile
+- [x] Somewhere in your app you can use the camera to take a picture and do something with the picture (e.g. take a photo and share it to a feed, or take a photo and set a user’s profile picture)
+- [x] Your app integrates with a SDK (e.g. Google Maps SDK, Facebook SDK)
+- [ ] Your app contains at least one more complex algorithm (talk over this with your manager)
+- [ ] Your app uses gesture recognizers (e.g. double tap to like, e.g. pinch to scale)
+- [ ] Your app use an animation (doesn’t have to be fancy) (e.g. fade in/out, e.g. animating a view growing and shrinking)
+- [x] Your app incorporates an external library to add visual polish
