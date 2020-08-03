@@ -61,7 +61,7 @@ public class ConversationsAdapter extends RecyclerView.Adapter<ConversationsAdap
     }
 
 
-    public void bind(Conversation conversation) {
+    public void bind(final Conversation conversation) {
       ParseUser recipient = conversation.getMembers().get(0);
       if (recipient.getObjectId().equals(ParseUser.getCurrentUser().getObjectId())) {
         recipient = conversation.getMembers().get(1);
@@ -97,6 +97,17 @@ public class ConversationsAdapter extends RecyclerView.Adapter<ConversationsAdap
           // Pass along the conversation object
           messagingIntent.putExtra(ParseUser.class.getSimpleName(), Parcels.wrap(finalRecipient));
           context.startActivity(messagingIntent);
+        }
+      });
+
+      final ParseUser recipientProfile = recipient;
+      binding.ivProfile.setOnLongClickListener(new View.OnLongClickListener() {
+        @Override
+        public boolean onLongClick(View view) {
+          Intent profileIntent = new Intent(context, ProfileActivity.class);
+          profileIntent.putExtra(ParseUser.class.getSimpleName(), Parcels.wrap(recipientProfile));
+          context.startActivity(profileIntent);
+          return false;
         }
       });
     }
