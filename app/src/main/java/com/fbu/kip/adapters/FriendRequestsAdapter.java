@@ -31,11 +31,13 @@ public class FriendRequestsAdapter extends RecyclerView.Adapter<RecyclerView.Vie
   Context context;
   List<FriendRequest> friendRequests;
   List<ParseUser> searchedUsers;
+  OnFriendRequestSentListener onFriendRequestSentListener;
 
-  public FriendRequestsAdapter(Context context, List<FriendRequest> friendRequests, List<ParseUser> searchedUsers) {
+  public FriendRequestsAdapter(Context context, List<FriendRequest> friendRequests, List<ParseUser> searchedUsers, OnFriendRequestSentListener onFriendRequestSentListener) {
     this.context = context;
     this.friendRequests = friendRequests;
     this.searchedUsers = searchedUsers;
+    this.onFriendRequestSentListener = onFriendRequestSentListener;
   }
 
   @NonNull
@@ -159,6 +161,7 @@ public class FriendRequestsAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         ivProfile.setImageResource(R.drawable.profile_placeholder);
       }
 
+      // User presses "Add"
       btnAdd.setOnClickListener(new View.OnClickListener() {
         @Override
         public void onClick(View view) {
@@ -173,9 +176,15 @@ public class FriendRequestsAdapter extends RecyclerView.Adapter<RecyclerView.Vie
           searchedUsers.remove(position);
           notifyItemRemoved(position);
 
+          // Delete in Activity's model
+          onFriendRequestSentListener.onFriendRequestSent(user);
         }
       });
     }
+  }
+
+  public interface OnFriendRequestSentListener {
+    void onFriendRequestSent(ParseUser user);
   }
 
 }

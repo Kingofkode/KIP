@@ -62,7 +62,13 @@ public class AddFriendActivity extends AppCompatActivity {
 
     queryFriendships();
 
-    adapter = new FriendRequestsAdapter(this, incomingFriendRequests, visibleUsers);
+    adapter = new FriendRequestsAdapter(this, incomingFriendRequests, visibleUsers, new FriendRequestsAdapter.OnFriendRequestSentListener() {
+      @Override
+      public void onFriendRequestSent(ParseUser user) {
+        allUsers.remove(user);
+      }
+    });
+
     binding.rvUsers.setAdapter(adapter);
     binding.rvUsers.setLayoutManager(new LinearLayoutManager(this));
     setupActionBar();
