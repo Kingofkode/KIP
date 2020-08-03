@@ -86,17 +86,7 @@ public class Utils {
     long hoursInMilli = minutesInMilli * 60;
     long daysInMilli = hoursInMilli * 24;
     // Calculate elapsed time
-    long elapsedDays = differenceInMili / daysInMilli;
-    differenceInMili = differenceInMili % daysInMilli;
-
-    long elapsedHours = differenceInMili / hoursInMilli;
-    differenceInMili = differenceInMili % hoursInMilli;
-
-    long elapsedMinutes = differenceInMili / minutesInMilli;
-    differenceInMili = differenceInMili % minutesInMilli;
-
-    long elapsedSeconds = differenceInMili / secondsInMilli;
-    return elapsedDays;
+    return differenceInMili / daysInMilli;
   }
 
   public static String getFullName(ParseUser user) {
