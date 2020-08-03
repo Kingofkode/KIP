@@ -22,6 +22,7 @@
         android:layout_marginStart="8dp"
         android:layout_toEndOf="@+id/ivProfile"
         android:text="TextView"
+        android:textColor="#000000"
         tools:text="isaiah4real" />
 
     <Button
