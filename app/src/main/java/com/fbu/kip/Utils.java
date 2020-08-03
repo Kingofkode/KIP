@@ -1,7 +1,6 @@
 package com.fbu.kip;
 
 import com.fbu.kip.activities.LoginActivity;
-import com.fbu.kip.models.Friendship;
 import com.parse.ParseUser;
 
 import org.jetbrains.annotations.NotNull;
@@ -13,8 +12,37 @@ import java.util.Locale;
 
 public class Utils {
 
+  @NotNull
   public static String getConversationTimestamp(Date date) {
-    String dateFormat = "h:mm aa";
+    if (date == null)
+      return "";
+    String dateFormat = "M/d/yyyy";
+    Calendar todayCalendar = Calendar.getInstance();
+    Calendar dateCalendar = Calendar.getInstance();
+    dateCalendar.setTime(date);
+
+    long secondsInMilli = 1000;
+    long minutesInMilli = secondsInMilli * 60;
+    long hoursInMilli = minutesInMilli * 60;
+    long daysInMilli = hoursInMilli * 24;
+
+    long differenceInMili = todayCalendar.getTime().getTime() - date.getTime();
+    long elapsedDays = differenceInMili / daysInMilli;
+
+    Calendar yesterdayCalendar = Calendar.getInstance();
+    yesterdayCalendar.add(Calendar.DAY_OF_YEAR, -1);
+
+    if (todayCalendar.get(Calendar.YEAR) == dateCalendar.get(Calendar.YEAR)) { // If this date is outside this year then just use the default date format
+
+      if (todayCalendar.get(Calendar.DAY_OF_YEAR) == dateCalendar.get(Calendar.DAY_OF_YEAR)) { // Conversation took place today
+        dateFormat = "h:mm aa";
+      } else if (yesterdayCalendar.get(Calendar.DAY_OF_YEAR) == dateCalendar.get(Calendar.DAY_OF_YEAR)) { // Yesterday
+        return "Yesterday";
+      } else if (elapsedDays < 7) { // This week
+        dateFormat = "EEEE";
+      }
+    }
+
     SimpleDateFormat simpleDateFormat = new SimpleDateFormat(dateFormat, Locale.ENGLISH);
     simpleDateFormat.setLenient(true);
     return simpleDateFormat.format(date);
