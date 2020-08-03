@@ -21,7 +21,9 @@ import com.facebook.login.LoginManager;
 import com.fbu.kip.R;
 import com.fbu.kip.Utils;
 import com.fbu.kip.databinding.ActivityProfileBinding;
+import com.fbu.kip.models.Conversation;
 import com.fbu.kip.models.Friendship;
+import com.fbu.kip.models.Message;
 import com.parse.FindCallback;
 import com.parse.GetCallback;
 import com.parse.LogOutCallback;
@@ -35,14 +37,15 @@ import com.parse.SaveCallback;
 import org.parceler.Parcels;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 public class ProfileActivity extends PhotoActivity {
 
+  private static final String TAG = "ProfileActivity";
   public static final String KEY_FRIEND_IDS = "friendIDs";
   public static final String KEY_PROFILE_IMAGE = "profileImage";
-
-  private static final String TAG = "ProfileActivity";
 
   ActivityProfileBinding binding;
 
@@ -83,13 +86,57 @@ public class ProfileActivity extends PhotoActivity {
     getSupportActionBar().setTitle(Utils.getFullName(user));
   }
 
-
-
-
   private void inflateProfile() {
     binding.tvUsername.setText(Utils.getFullName(user));
     inflateProfileImage();
     inflateFriendCount();
+    inflateFriendshipHealthBar();
+  }
+
+  private void inflateFriendshipHealthBar() {
+    if (isCurrentUser)
+      return;
+    binding.healthBar.setVisibility(View.VISIBLE);
+    ParseQuery<Conversation> conversationParseQuery = ParseQuery.getQuery(Conversation.class);
+    ArrayList<ParseUser> memberIDs = new ArrayList<>();
+    memberIDs.add(ParseUser.getCurrentUser());
+    memberIDs.add(user);
+    conversationParseQuery.whereContainsAll(Conversation.KEY_MEMBER_IDS, memberIDs);
+    conversationParseQuery.include(Conversation.KEY_MEMBER_IDS);
+    conversationParseQuery.addDescendingOrder(Message.KEY_UPDATED_AT);
+    conversationParseQuery.findInBackground(new FindCallback<Conversation>() {
+      @Override
+      public void done(List<Conversation> conversationsList, ParseException e) {
+        if (e != null) {
+          Log.e(TAG, "Error fetching conversation", e);
+          return;
+        }
+        if (conversationsList.isEmpty()) { // User has never had a conversation. They are out of touch
+          binding.healthBar.setValue(0.0);
+          return;
+        }
+
+        // Should be 1 conversation
+        Conversation conversation = conversationsList.get(0);
+        Utils.FriendshipStatus friendshipStatus = Utils.getFriendshipStatus(conversation.getUpdatedAt());
+        switch (friendshipStatus) {
+          case inTouch:
+            binding.healthBar.setValue(100);
+            break;
+          case beenASecond:
+            binding.healthBar.setValue(79);
+            break;
+          case beenAMinute:
+            binding.healthBar.setValue(59);
+            break;
+          case beenAWhile:
+            binding.healthBar.setValue(39);
+            break;
+          case beenForever:
+            binding.healthBar.setValue(0);
+        }
+      }
+    });
   }
 
   private void inflateProfileImage() {

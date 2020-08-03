@@ -40,8 +40,11 @@
         android:text="Loading ..."/>
 
     <org.ogasimli.healthbarview.HealthBarView
+        android:id="@+id/healthBar"
         android:visibility="gone"
+        tools:visibility="visible"
         android:paddingTop="8dp"
+        app:hbv_indicatorWidth="2dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:hbv_showValue="false"
