@@ -41,7 +41,11 @@ public class Utils {
     return simpleDateFormat.format(date);
   }
 
+  @NotNull
   public static String getFriendshipTimestamp(Date date) {
+    if (date == null)
+      return "";
+
     String dateFormat = "MMMM d, yyyy";
     SimpleDateFormat simpleDateFormat = new SimpleDateFormat(dateFormat, Locale.ENGLISH);
     simpleDateFormat.setLenient(true);
@@ -96,6 +100,9 @@ public class Utils {
   }
 
   public static String getFullName(ParseUser user) {
+    if (user == null)
+      return "";
+
     String fullName = (String) user.get(LoginActivity.FULL_NAME);
     if (fullName == null) {
       return user.getUsername();
