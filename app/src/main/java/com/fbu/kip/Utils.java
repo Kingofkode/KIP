@@ -9,12 +9,20 @@ import java.util.Locale;
 
 public class Utils {
 
-  public static String getTimestamp(Date date) {
+  public static String getConversationTimestamp(Date date) {
     String dateFormat = "h:mm aa";
     SimpleDateFormat simpleDateFormat = new SimpleDateFormat(dateFormat, Locale.ENGLISH);
     simpleDateFormat.setLenient(true);
     return simpleDateFormat.format(date);
   }
+
+  public static String getFriendshipTimestamp(Date date) {
+    String dateFormat = "MMMM d, yyyy";
+    SimpleDateFormat simpleDateFormat = new SimpleDateFormat(dateFormat, Locale.ENGLISH);
+    simpleDateFormat.setLenient(true);
+    return simpleDateFormat.format(date);
+  }
+
 
   public static String getFullName(ParseUser user) {
     String fullName = (String) user.get(LoginActivity.FULL_NAME);

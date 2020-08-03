@@ -109,12 +109,29 @@ public class ProfileActivity extends PhotoActivity {
   private void inflateFriendCount() {
     ParseQuery<Friendship> friendships = ParseQuery.getQuery(Friendship.class);
     friendships.whereMatches(Friendship.KEY_USER_A, user.getObjectId());
+    friendships.include(Friendship.KEY_USER_B);
     friendships.findInBackground(new FindCallback<Friendship>() {
       @Override
       public void done(List<Friendship> friendships, ParseException e) {
         int friendCount = friendships.size();
         String friendCountString = getResources().getQuantityString(R.plurals.numberOfFriends, friendCount, friendCount);
         binding.tvFriendCount.setText(friendCountString);
+
+        if (user.getObjectId().equals(ParseUser.getCurrentUser().getObjectId())) {
+          // Show join date
+          String joinDescription = "Joined KIP on " + Utils.getFriendshipTimestamp(user.getCreatedAt());
+          binding.tvFriendDuration.setText(joinDescription);
+        } else {
+          // Show friend duration
+          for (Friendship friendship : friendships) {
+            if (friendship.getUserB().getObjectId().equals(ParseUser.getCurrentUser().getObjectId())) {
+              String friendshipDescription = "Friends since " + Utils.getFriendshipTimestamp(friendship.getCreatedAt());
+              binding.tvFriendDuration.setText(friendshipDescription);
+              break;
+            }
+
+          }
+        }
       }
     });
 

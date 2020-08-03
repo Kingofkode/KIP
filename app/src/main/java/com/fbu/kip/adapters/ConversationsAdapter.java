@@ -85,7 +85,7 @@ public class ConversationsAdapter extends RecyclerView.Adapter<ConversationsAdap
       }
 
       // Inflate timestamp
-      binding.tvDate.setText(Utils.getTimestamp(conversation.getUpdatedAt()));
+      binding.tvDate.setText(Utils.getConversationTimestamp(conversation.getUpdatedAt()));
 
       // Click Listener
       final ParseUser finalRecipient = recipient;
