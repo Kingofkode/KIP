@@ -3,6 +3,8 @@ package com.fbu.kip.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -64,16 +66,47 @@ public class MessageActivity extends AppCompatActivity {
 
     binding.rvMessages.setLayoutManager(configureLayoutManager());
 
-    setupKeyboardListener();
+    setupKeyboardLayoutListener();
     fetchExistingConversation();
     setupToolbar();
     preFillSuggestionIfNeeded();
+    setupKeyboardListener();
   }
 
+  private void setupKeyboardListener() {
+    binding.etMessage.addTextChangedListener(new TextWatcher() {
+      @Override
+      public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+      }
+
+      @Override
+      public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+        if (charSequence.length() == 0) {
+          // Disable send button
+          binding.btnSend.setEnabled(false);
+          binding.btnSend.setAlpha(128);
+        } else {
+          // Enable send button
+          binding.btnSend.setEnabled(true);
+          binding.btnSend.setAlpha(255);
+        }
+      }
+
+      @Override
+      public void afterTextChanged(Editable editable) {
+
+      }
+    });
+  }
+  // Also enables / disabled initial state of send button
   private void preFillSuggestionIfNeeded() {
     Suggestion suggestion = Parcels.unwrap(getIntent().getParcelableExtra(Suggestion.class.getSimpleName()));
-    if (suggestion == null)
+    if (suggestion == null) {
+      binding.btnSend.setAlpha(128);
+      binding.btnSend.setEnabled(false);
       return;
+    }
     binding.etMessage.setText(suggestion.getBody());
     binding.etMessage.requestFocus();
   }
@@ -184,7 +217,7 @@ public class MessageActivity extends AppCompatActivity {
   }
 
   // Scroll RecyclerView down when keyboard is presented
-  private void setupKeyboardListener() {
+  private void setupKeyboardLayoutListener() {
     binding.rvMessages.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
       @Override
       public void onLayoutChange(View view, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
