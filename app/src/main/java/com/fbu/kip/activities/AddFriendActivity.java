@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 
 import androidx.appcompat.widget.SearchView;
 
@@ -101,7 +102,8 @@ public class AddFriendActivity extends AppCompatActivity {
           Log.e(TAG, "Issue getting friend requests", e);
           return;
         }
-
+        if (!friendRequests.isEmpty())
+          binding.progressBar.setVisibility(View.GONE);
         incomingFriendRequests.addAll(friendRequests);
         adapter.notifyDataSetChanged();
         incomingFriendRequestsLoaded = true;
@@ -133,6 +135,7 @@ public class AddFriendActivity extends AppCompatActivity {
 
   private void showFriendSuggestionsIfReady() {
     if (friendshipsLoaded && incomingFriendRequestsLoaded && outgoingFriendRequestsLoaded) {
+      binding.progressBar.setVisibility(View.GONE);
       loadAllUsers();
     }
   }
