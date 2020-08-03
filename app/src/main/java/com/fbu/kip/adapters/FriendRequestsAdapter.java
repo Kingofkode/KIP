@@ -31,13 +31,13 @@ public class FriendRequestsAdapter extends RecyclerView.Adapter<RecyclerView.Vie
   Context context;
   List<FriendRequest> friendRequests;
   List<ParseUser> searchedUsers;
-  OnFriendRequestSentListener onFriendRequestSentListener;
+  onActionButtonClickListener onActionButtonClickListener;
 
-  public FriendRequestsAdapter(Context context, List<FriendRequest> friendRequests, List<ParseUser> searchedUsers, OnFriendRequestSentListener onFriendRequestSentListener) {
+  public FriendRequestsAdapter(Context context, List<FriendRequest> friendRequests, List<ParseUser> searchedUsers, onActionButtonClickListener onActionButtonClickListener) {
     this.context = context;
     this.friendRequests = friendRequests;
     this.searchedUsers = searchedUsers;
-    this.onFriendRequestSentListener = onFriendRequestSentListener;
+    this.onActionButtonClickListener = onActionButtonClickListener;
   }
 
   @NonNull
@@ -124,6 +124,9 @@ public class FriendRequestsAdapter extends RecyclerView.Adapter<RecyclerView.Vie
           int position = friendRequests.indexOf(friendRequest);
           friendRequests.remove(position);
           notifyItemRemoved(position);
+
+          // 4. Delete in activity's model
+          onActionButtonClickListener.onFriendRequestAccept(friendRequest.getSender());
         }
       });
     }
@@ -177,14 +180,15 @@ public class FriendRequestsAdapter extends RecyclerView.Adapter<RecyclerView.Vie
           notifyItemRemoved(position);
 
           // Delete in Activity's model
-          onFriendRequestSentListener.onFriendRequestSent(user);
+          onActionButtonClickListener.onFriendRequestSent(user);
         }
       });
     }
   }
 
-  public interface OnFriendRequestSentListener {
+  public interface onActionButtonClickListener {
     void onFriendRequestSent(ParseUser user);
+    void onFriendRequestAccept(ParseUser user);
   }
 
 }

@@ -7,9 +7,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 
-import androidx.appcompat.widget.SearchView;
-
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import androidx.core.view.MenuItemCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -20,7 +19,6 @@ import com.fbu.kip.databinding.ActivityAddFriendBinding;
 import com.fbu.kip.models.FriendRequest;
 import com.fbu.kip.models.Friendship;
 import com.parse.FindCallback;
-import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
@@ -30,6 +28,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.ListIterator;
 
 public class AddFriendActivity extends AppCompatActivity {
 
@@ -62,10 +61,23 @@ public class AddFriendActivity extends AppCompatActivity {
 
     queryFriendships();
 
-    adapter = new FriendRequestsAdapter(this, incomingFriendRequests, visibleUsers, new FriendRequestsAdapter.OnFriendRequestSentListener() {
+    adapter = new FriendRequestsAdapter(this, incomingFriendRequests, visibleUsers, new FriendRequestsAdapter.onActionButtonClickListener() {
       @Override
       public void onFriendRequestSent(ParseUser user) {
         allUsers.remove(user);
+      }
+
+      @Override
+      public void onFriendRequestAccept(ParseUser userToRemove) {
+        ListIterator<ParseUser> userListIterator = allUsers.listIterator();
+        boolean hasRemovedUser = false;
+        while (!hasRemovedUser && userListIterator.hasNext()) {
+          ParseUser userInQuestion = userListIterator.next();
+          if (userInQuestion.getObjectId().equals(userToRemove.getObjectId())) {
+            userListIterator.remove();
+            hasRemovedUser = true;
+          }
+        }
       }
     });
 
