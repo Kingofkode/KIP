@@ -20,17 +20,10 @@ public class Utils {
     Calendar todayCalendar = Calendar.getInstance();
     Calendar dateCalendar = Calendar.getInstance();
     dateCalendar.setTime(date);
-
-    long secondsInMilli = 1000;
-    long minutesInMilli = secondsInMilli * 60;
-    long hoursInMilli = minutesInMilli * 60;
-    long daysInMilli = hoursInMilli * 24;
-
-    long differenceInMili = todayCalendar.getTime().getTime() - date.getTime();
-    long elapsedDays = differenceInMili / daysInMilli;
-
     Calendar yesterdayCalendar = Calendar.getInstance();
     yesterdayCalendar.add(Calendar.DAY_OF_YEAR, -1);
+
+    long elapsedDays = getElapsedDays(todayCalendar.getTime(), date);
 
     if (todayCalendar.get(Calendar.YEAR) == dateCalendar.get(Calendar.YEAR)) { // If this date is outside this year then just use the default date format
 
@@ -66,9 +59,24 @@ public class Utils {
   public static FriendshipStatus getFriendshipStatus(Date lastMessageDate) {
     if (lastMessageDate == null)
       return FriendshipStatus.beenForever;
+    long elapsedDays = getElapsedDays(Calendar.getInstance().getTime(), lastMessageDate);
+    // Determine outcome
+    if (elapsedDays < 1)
+      return FriendshipStatus.inTouch;
+    if (elapsedDays < 2)
+      return FriendshipStatus.beenASecond;
+    if (elapsedDays < 3)
+      return FriendshipStatus.beenAMinute;
+    if (elapsedDays < 4)
+      return FriendshipStatus.beenAWhile;
+    return FriendshipStatus.beenForever;
+  }
 
-    long differenceInMili = Calendar.getInstance().getTime().getTime() - lastMessageDate.getTime();
+  public static long getElapsedDays(Date date1, Date date2) {
+    if (date1 == null || date2 == null)
+      return -1;
 
+    long differenceInMili = date1.getTime() - date2.getTime();
     long secondsInMilli = 1000;
     long minutesInMilli = secondsInMilli * 60;
     long hoursInMilli = minutesInMilli * 60;
@@ -84,16 +92,7 @@ public class Utils {
     differenceInMili = differenceInMili % minutesInMilli;
 
     long elapsedSeconds = differenceInMili / secondsInMilli;
-    // Determine outcome
-    if (elapsedDays < 1)
-      return FriendshipStatus.inTouch;
-    if (elapsedDays < 2)
-      return FriendshipStatus.beenASecond;
-    if (elapsedDays < 3)
-      return FriendshipStatus.beenAMinute;
-    if (elapsedDays < 4)
-      return FriendshipStatus.beenAWhile;
-    return FriendshipStatus.beenForever;
+    return elapsedDays;
   }
 
   public static String getFullName(ParseUser user) {
