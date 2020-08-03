@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:HealthBarView="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:padding="16dp"
     tools:context=".activities.ProfileActivity">
@@ -38,7 +39,18 @@
         android:textColor="#000000"
         android:text="Loading ..."/>
 
+    <org.ogasimli.healthbarview.HealthBarView
+        android:visibility="gone"
+        android:paddingTop="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:hbv_showValue="false"
+        app:hbv_value="50"
+        app:hbv_labelFont="@font/roboto_regular"
+        HealthBarView:hbv_labels="It's Been Forever|It's Been Awhile|It's Been a Minute|It's Been a Second|In Touch"/>
+
     <TextView
+        android:paddingTop="16dp"
         android:id="@+id/tvFriendDuration"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
