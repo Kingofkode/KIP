@@ -44,8 +44,12 @@ public class UtilTests extends ParseTest {
     // Edge case: null input
     assertEquals(Utils.FriendshipStatus.beenForever, Utils.getFriendshipStatus(null));
 
+    // Edge case: date in future
+    testCalendar.add(Calendar.DAY_OF_YEAR, 1);
+    assertEquals(Utils.FriendshipStatus.inTouch, Utils.getFriendshipStatus(testCalendar.getTime()));
+
     // Test date = 1 day ago, should return inTouch
-    testCalendar.add(Calendar.DAY_OF_YEAR, -1);
+    testCalendar.add(Calendar.DAY_OF_YEAR, -2);
     assertEquals(Utils.FriendshipStatus.inTouch, Utils.getFriendshipStatus(testCalendar.getTime()));
 
     // Test date = 2 days ago, should return been a second
@@ -64,5 +68,7 @@ public class UtilTests extends ParseTest {
     testCalendar.add(Calendar.DAY_OF_YEAR, -1);
     assertEquals(Utils.FriendshipStatus.beenForever, Utils.getFriendshipStatus(testCalendar.getTime()));
   }
+
+
 
 }

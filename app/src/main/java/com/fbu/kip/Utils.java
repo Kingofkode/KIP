@@ -63,7 +63,12 @@ public class Utils {
   public static FriendshipStatus getFriendshipStatus(Date lastMessageDate) {
     if (lastMessageDate == null)
       return FriendshipStatus.beenForever;
-    long elapsedDays = getElapsedDays(Calendar.getInstance().getTime(), lastMessageDate);
+
+    Date now = Calendar.getInstance().getTime();
+    if (lastMessageDate.compareTo(now) > 0) // If date is somehow in the future, we are definitely in touch
+      return FriendshipStatus.inTouch;
+
+    long elapsedDays = getElapsedDays(now, lastMessageDate);
     // Determine outcome
     if (elapsedDays <= 1)
       return FriendshipStatus.inTouch;
