@@ -76,7 +76,7 @@ public class Utils {
     return FriendshipStatus.beenForever;
   }
 
-  public static long getElapsedDays(Date date1, Date date2) {
+  public static int getElapsedDays(Date date1, Date date2) {
     if (date1 == null || date2 == null)
       return -1;
 
@@ -85,8 +85,9 @@ public class Utils {
     long minutesInMilli = secondsInMilli * 60;
     long hoursInMilli = minutesInMilli * 60;
     long daysInMilli = hoursInMilli * 24;
+    double numberOfDays = (double) differenceInMili / daysInMilli;
     // Calculate elapsed time
-    return differenceInMili / daysInMilli;
+    return (int) Math.rint(numberOfDays);
   }
 
   public static String getFullName(ParseUser user) {
