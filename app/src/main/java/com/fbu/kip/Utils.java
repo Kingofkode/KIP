@@ -27,7 +27,7 @@ public class Utils {
 
     if (todayCalendar.get(Calendar.YEAR) == dateCalendar.get(Calendar.YEAR)) { // If this date is outside this year then just use the default date format
 
-      if (todayCalendar.get(Calendar.DAY_OF_YEAR) == dateCalendar.get(Calendar.DAY_OF_YEAR)) { // Conversation took place today
+      if (todayCalendar.get(Calendar.DAY_OF_YEAR) <= dateCalendar.get(Calendar.DAY_OF_YEAR)) { // Conversation took place today or in the future
         dateFormat = "h:mm aa";
       } else if (yesterdayCalendar.get(Calendar.DAY_OF_YEAR) == dateCalendar.get(Calendar.DAY_OF_YEAR)) { // Yesterday
         return "Yesterday";

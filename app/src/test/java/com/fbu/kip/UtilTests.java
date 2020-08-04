@@ -97,12 +97,44 @@ public class UtilTests extends ParseTest {
     testCalendar.set(Calendar.YEAR, 1998);
     assertEquals("June 14, 1998", Utils.getFriendshipTimestamp(testCalendar.getTime()));
 
-    // Test: Billie Eilish's 21st birthday
+    // Test: Billie Eilish's 21st birthday: December 18, 2022
     testCalendar.set(Calendar.MONTH, Calendar.DECEMBER);
     testCalendar.set(Calendar.DAY_OF_MONTH, 18);
     testCalendar.set(Calendar.YEAR, 2022);
     assertEquals("December 18, 2022", Utils.getFriendshipTimestamp(testCalendar.getTime()));
   }
 
+  @Test
+  public void getConversationTimestamp() {
+    // Edge case: null date, should return empty string
+    assertEquals("", Utils.getConversationTimestamp(null));
+
+    // Edge case: date in the future
+    Calendar testCalendar = Calendar.getInstance();
+    testCalendar.set(Calendar.HOUR_OF_DAY, 9);
+    testCalendar.set(Calendar.MINUTE, 31);
+    testCalendar.add(Calendar.DAY_OF_YEAR, 1);
+    assertEquals("9:31 AM", Utils.getConversationTimestamp(testCalendar.getTime()));
+
+    // Test: 9:31 AM today
+    testCalendar.add(Calendar.DAY_OF_YEAR, -1);
+    assertEquals("9:31 AM", Utils.getConversationTimestamp(testCalendar.getTime()));
+
+    // Test: Yesterday
+    testCalendar.add(Calendar.DAY_OF_YEAR, -1);
+    assertEquals("Yesterday", Utils.getConversationTimestamp(testCalendar.getTime()));
+
+    // Test: This past week on Wednesday
+    testCalendar.add(Calendar.DAY_OF_YEAR, -6);
+    testCalendar.set(Calendar.DAY_OF_WEEK, Calendar.WEDNESDAY);
+    assertEquals("Wednesday", Utils.getConversationTimestamp(testCalendar.getTime()));
+
+    // Test: Date far in the past: iPhone unveil - 6/29/2007
+    testCalendar.set(Calendar.YEAR, 2007);
+    testCalendar.set(Calendar.MONTH, Calendar.JUNE);
+    testCalendar.set(Calendar.DAY_OF_MONTH, 29);
+    assertEquals("6/29/2007", Utils.getConversationTimestamp(testCalendar.getTime()));
+
+  }
 
 }
