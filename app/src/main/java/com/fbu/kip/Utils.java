@@ -65,13 +65,13 @@ public class Utils {
       return FriendshipStatus.beenForever;
     long elapsedDays = getElapsedDays(Calendar.getInstance().getTime(), lastMessageDate);
     // Determine outcome
-    if (elapsedDays < 1)
+    if (elapsedDays <= 1)
       return FriendshipStatus.inTouch;
-    if (elapsedDays < 2)
+    if (elapsedDays <= 2)
       return FriendshipStatus.beenASecond;
-    if (elapsedDays < 3)
+    if (elapsedDays <= 3)
       return FriendshipStatus.beenAMinute;
-    if (elapsedDays < 4)
+    if (elapsedDays <= 4)
       return FriendshipStatus.beenAWhile;
     return FriendshipStatus.beenForever;
   }
