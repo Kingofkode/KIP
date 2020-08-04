@@ -175,6 +175,6 @@ Top Right:
 - [x] Somewhere in your app you can use the camera to take a picture and do something with the picture (e.g. take a photo and share it to a feed, or take a photo and set a user’s profile picture)
 - [x] Your app integrates with a SDK (Facebook SDK)
 - [x] Your app contains at least one more complex algorithm (talk over this with your manager)
-- [ ] Your app uses gesture recognizers (e.g. double tap to like, e.g. pinch to scale)
+- [x] Your app uses gesture recognizers (e.g. double tap to like, e.g. pinch to scale)
 - [x] Your app use an animation (doesn’t have to be fancy) (e.g. fade in/out, e.g. animating a view growing and shrinking)
 - [x] Your app incorporates an external library to add visual polish
