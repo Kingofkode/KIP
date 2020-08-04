@@ -1,7 +1,6 @@
 package com.fbu.kip;
 
 import com.fbu.kip.activities.LoginActivity;
-import com.fbu.kip.models.Friendship;
 import com.parse.ParseUser;
 
 import org.junit.Test;
@@ -84,6 +83,25 @@ public class UtilTests extends ParseTest {
     // Test: user that has a username and a full name
     testUser.put(LoginActivity.FULL_NAME, "Isaiah Suarez");
     assertEquals("Isaiah Suarez", Utils.getFullName(testUser));
+  }
+
+  @Test
+  public void getFriendshipTimestamp() {
+    // Edge case: null date, should return empty string
+    assertEquals("", Utils.getFriendshipTimestamp(null));
+
+    // Test: day MJ won his 6th championship with the Bulls: June 14, 1998
+    Calendar testCalendar = Calendar.getInstance();
+    testCalendar.set(Calendar.MONTH, Calendar.JUNE);
+    testCalendar.set(Calendar.DAY_OF_MONTH, 14);
+    testCalendar.set(Calendar.YEAR, 1998);
+    assertEquals("June 14, 1998", Utils.getFriendshipTimestamp(testCalendar.getTime()));
+
+    // Test: Billie Eilish's 21st birthday
+    testCalendar.set(Calendar.MONTH, Calendar.DECEMBER);
+    testCalendar.set(Calendar.DAY_OF_MONTH, 18);
+    testCalendar.set(Calendar.YEAR, 2022);
+    assertEquals("December 18, 2022", Utils.getFriendshipTimestamp(testCalendar.getTime()));
   }
 
 
