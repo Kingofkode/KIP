@@ -1,6 +1,8 @@
 package com.fbu.kip;
 
+import com.fbu.kip.activities.LoginActivity;
 import com.fbu.kip.models.Friendship;
+import com.parse.ParseUser;
 
 import org.junit.Test;
 
@@ -41,10 +43,10 @@ public class UtilTests extends ParseTest {
   public void getFriendshipStatus() {
     Calendar testCalendar = Calendar.getInstance();
 
-    // Edge case: null input
+    // Edge case: null input, should return been forever
     assertEquals(Utils.FriendshipStatus.beenForever, Utils.getFriendshipStatus(null));
 
-    // Edge case: date in future
+    // Edge case: date in future, should return in touch
     testCalendar.add(Calendar.DAY_OF_YEAR, 1);
     assertEquals(Utils.FriendshipStatus.inTouch, Utils.getFriendshipStatus(testCalendar.getTime()));
 
@@ -69,6 +71,20 @@ public class UtilTests extends ParseTest {
     assertEquals(Utils.FriendshipStatus.beenForever, Utils.getFriendshipStatus(testCalendar.getTime()));
   }
 
+  @Test
+  public void getFullName() {
+    // Edge case: null user, should return empty string
+    assertEquals("", Utils.getFullName(null));
+
+    // Test: user that doesn't have a full name. Should return the username
+    ParseUser testUser = new ParseUser();
+    testUser.setUsername("cornerVillage");
+    assertEquals("cornerVillage", Utils.getFullName(testUser));
+
+    // Test: user that has a username and a full name
+    testUser.put(LoginActivity.FULL_NAME, "Isaiah Suarez");
+    assertEquals("Isaiah Suarez", Utils.getFullName(testUser));
+  }
 
 
 }
